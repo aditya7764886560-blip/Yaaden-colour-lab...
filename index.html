@@ -1,0 +1,2692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yaaden Studio</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      --bg-color: #f6f7f9;
+      --card-bg: #ffffff;
+      --text-main: #121212;
+      --text-muted: #757575;
+      --accent-color: #000000;
+      --border-radius: 20px;
+      --shadow-sm: 0 4px 20px rgba(0, 0, 0, 0.03);
+      --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    /* SPLASH SCREEN STYLES */
+    #splashScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    .splash-logo-wrapper {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: bounceIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+
+    .splash-ring {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 140px;
+      height: 140px;
+      transform: rotate(-90deg);
+    }
+
+    .splash-ring circle {
+      stroke-dasharray: 289;
+      stroke-dashoffset: 289;
+      animation: drawRing 1.4s ease-in-out forwards;
+      animation-delay: 0.2s;
+    }
+
+    .splash-logo-circle {
+      width: 124px;
+      height: 124px;
+      border-radius: 50%;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+      padding: 4px;
+      z-index: 2;
+    }
+
+    .splash-logo-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .splash-tagline {
+      color: #ffffff;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      margin-top: 24px;
+      text-align: center;
+      animation: fadeInText 1.5s ease-in-out forwards;
+      opacity: 0;
+      animation-delay: 0.6s;
+    }
+
+    .splash-sub {
+      color: #aaaaaa;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 6px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      animation: fadeInText 1.5s ease-in-out forwards;
+      opacity: 0;
+      animation-delay: 0.9s;
+    }
+
+    @keyframes bounceIn {
+      0% { transform: scale(0); opacity: 0; }
+      60% { transform: scale(1.08); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes drawRing {
+      to { stroke-dashoffset: 0; }
+    }
+
+    @keyframes fadeInText {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 430px;
+      background-color: #fafafa;
+      min-height: 100vh;
+      padding: 20px 20px 110px 20px;
+      position: relative;
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.05);
+    }
+
+    /* BRAND LOGO */
+    .brand-logo-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+      margin-bottom: 16px;
+      width: 100%;
+    }
+
+    .brand-logo-circle {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 4px solid #111111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      padding: 4px;
+    }
+
+    .brand-logo-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      display: block;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 5px;
+      margin-bottom: 20px;
+    }
+
+    .brand-title {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #111111 0%, #444444 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-icons {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn-badge {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 1px solid #eeeeee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #333;
+    }
+
+    .badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: #ff3b30;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #fff;
+    }
+
+    /* Search Box */
+    .search-box {
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(0, 0, 0, 0.03);
+      margin-bottom: 24px;
+    }
+
+    .search-box input {
+      border: none;
+      outline: none;
+      width: 100%;
+      font-size: 15px;
+      color: var(--text-main);
+      background: transparent;
+      font-weight: 500;
+    }
+
+    .search-box input::placeholder { color: #a0a0a0; }
+    .filter-btn { color: #666; cursor: pointer; }
+
+    /* Promo Card */
+    .promo-card {
+      background: linear-gradient(135deg, #eef9f2 0%, #e6f4ea 50%, #f0f7f4 100%);
+      border-radius: 24px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+    }
+
+    .promo-tag { color: #e65100; font-weight: 700; font-size: 18px; margin-bottom: 4px; }
+    .promo-title { font-size: 14px; color: var(--text-muted); margin-bottom: 16px; font-weight: 500; }
+    .promo-btn {
+      background: var(--accent-color);
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .promo-illustration {
+      position: absolute;
+      right: 15px;
+      bottom: 15px;
+      width: 80px;
+      height: 80px;
+      opacity: 0.85;
+    }
+
+    .section-header-title {
+      font-size: 22px;
+      font-weight: 900;
+      color: #111111;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .section-header-underline {
+      width: 50px;
+      height: 4px;
+      background: #111111;
+      border-radius: 2px;
+      margin-bottom: 20px;
+    }
+
+    /* Divisions */
+    .division-master-block {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 18px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+    }
+
+    .division-header-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #f2f2f2;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .service-card {
+      background: #fcfcfc;
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+      border: 1px solid #eeeeee;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .service-card:active {
+      transform: scale(0.98);
+      background: #f4f4f4;
+    }
+
+    .service-icon-wrapper {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: #111111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      color: #ffffff;
+    }
+
+    .service-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 4px;
+      line-height: 1.25;
+    }
+
+    .service-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+
+    .service-footer {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: auto;
+    }
+
+    .add-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #f1f1f1;
+      color: #111111;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* YAADEN NEWS SECTION STYLES */
+    .news-section-card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+    }
+
+    .news-title-header {
+      font-size: 18px;
+      font-weight: 800;
+      color: #111;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #f2f2f2;
+    }
+
+    .news-slider-wrapper {
+      position: relative;
+      width: 100%;
+      height: 220px;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 14px;
+      background: #000;
+    }
+
+    .news-slider-track {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .news-slider-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .news-slide-img {
+      min-width: 100%;
+      height: 100%;
+      object-fit: cover;
+      scroll-snap-align: start;
+    }
+
+    .news-desc-box {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #444;
+      max-height: 250px;
+      overflow-y: auto;
+      padding: 12px;
+      background: #f9f9f9;
+      border-radius: 12px;
+      border: 1px solid #eee;
+      white-space: pre-wrap;
+    }
+
+    .news-admin-actions {
+      display: none;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .btn-news-action {
+      flex: 1;
+      padding: 10px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-news-add { background: #111; color: #fff; }
+    .btn-news-remove { background: #ff3b30; color: #fff; }
+
+    /* Navigation */
+    .bottom-nav-container {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 40px);
+      max-width: 390px;
+      z-index: 100;
+    }
+
+    .bottom-nav {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 35px;
+      padding: 6px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 25px;
+      border: none;
+      background: transparent;
+      color: #666;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-item.active {
+      background: #111111;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 12px;
+    }
+
+    .modal-content {
+      background: #ffffff;
+      width: 100%;
+      max-width: 580px;
+      max-height: 96vh;
+      overflow-y: auto;
+      border-radius: 32px;
+      padding: 28px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+      position: relative;
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .close-modal-icon {
+      position: absolute;
+      top: 22px;
+      right: 22px;
+      cursor: pointer;
+      color: #444;
+      background: #f0f0f0;
+      border-radius: 50%;
+      padding: 6px;
+    }
+
+    .cart-items-container {
+      max-height: 320px;
+      overflow-y: auto;
+      margin: 15px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .cart-item-card {
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-item-details { display: flex; flex-direction: column; gap: 3px; }
+    .cart-item-title { font-size: 14px; font-weight: 800; color: #111; }
+    .cart-item-sub { font-size: 12px; color: #666; }
+
+    .delete-item-btn {
+      background: #ffebee;
+      color: #d32f2f;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    .empty-cart-view { text-align: center; padding: 30px 10px; color: #888; }
+
+    .info-card-block {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(0,0,0,0.03);
+    }
+
+    .info-card-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: #111;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .about-text {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #555;
+      text-align: justify;
+      margin-bottom: 12px;
+    }
+
+    .founder-box {
+      background: #f8f9fa;
+      border-left: 4px solid #111;
+      padding: 10px 14px;
+      border-radius: 0 12px 12px 0;
+      font-size: 13px;
+      font-weight: 700;
+      color: #222;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .timing-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      padding: 8px 0;
+      border-bottom: 1px dashed #eee;
+    }
+    .timing-row:last-child { border-bottom: none; }
+
+    .social-links-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
+      text-decoration: none;
+      color: #333;
+      font-size: 12px;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+    .social-btn:hover { background: #111; color: #fff; }
+
+    .terms-list {
+      list-style-type: none;
+      padding-left: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 12px;
+      color: #555;
+    }
+
+    .terms-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.4;
+    }
+
+    .make-order-card {
+      background: #000000;
+      color: #ffffff;
+      border-radius: 22px;
+      padding: 22px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    .make-order-title { font-size: 18px; font-weight: 800; margin-bottom: 6px; letter-spacing: 0.5px; }
+    .make-order-desc { font-size: 12px; color: #aaa; margin-bottom: 16px; }
+
+    .order-action-btns { display: flex; gap: 10px; }
+
+    .order-act-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 14px;
+      border: none;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+    .btn-call { background: #ffffff; color: #000000; }
+    .btn-wa { background: #25D366; color: #ffffff; }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .gallery-item {
+      height: 110px;
+      border-radius: 14px;
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      transition: transform 0.2s;
+    }
+    .gallery-item:hover { transform: scale(1.02); }
+
+    .reviews-scroll-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 280px;
+      overflow-y: auto;
+      padding-right: 4px;
+      margin-bottom: 16px;
+    }
+
+    .review-card {
+      background: #f8f9fa;
+      border: 1px solid #eeeeee;
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .reviewer-name { font-size: 13px; font-weight: 700; color: #111; }
+    .stars { color: #ffb400; font-size: 12px; }
+    .review-comment { font-size: 12px; color: #555; }
+
+    .add-review-box {
+      background: #fdfdfd;
+      border: 1px solid #e0e0e0;
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .add-review-box input, .add-review-box textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 12px;
+      outline: none;
+    }
+
+    .btn-main {
+      width: 100%;
+      background: #111111;
+      color: #ffffff;
+      border: none;
+      padding: 14px;
+      border-radius: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .footer-branding { text-align: center; padding: 30px 10px 10px 10px; margin-top: 20px; }
+    .trust-tagline { font-size: 16px; font-weight: 900; color: #111111; letter-spacing: 1px; margin-bottom: 4px; }
+    .brand-subline { font-size: 12px; font-weight: 700; color: #777; }
+
+    .print-panel-body { padding: 15px 0; }
+    
+    .upload-box {
+      border: 2px dashed #000;
+      border-radius: 18px;
+      padding: 24px;
+      text-align: center;
+      background: #f9f9f9;
+      cursor: pointer;
+      margin-bottom: 20px;
+      transition: background 0.2s;
+    }
+    .upload-box:hover { background: #f0f0f0; }
+
+    .preview-large-panel {
+      width: 100%;
+      height: 240px;
+      background: #eaeaea;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin-bottom: 20px;
+      position: relative;
+      border: 2px solid #ddd;
+    }
+
+    .preview-large-panel img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+
+    .size-chips-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .size-chip {
+      background: #f2f2f2;
+      border: 1px solid #ddd;
+      padding: 12px 6px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      line-height: 1.3;
+    }
+
+    .size-chip.active {
+      background: #111;
+      color: #fff;
+      border-color: #111;
+    }
+    .size-chip.active span {
+      color: #fff !important;
+    }
+
+    /* EDIT MODAL EXTRA STYLES */
+    .edit-field-group {
+      margin-bottom: 14px;
+    }
+    .edit-field-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #333;
+    }
+    .edit-field-group input, .edit-field-group select, .edit-field-group textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 14px;
+      outline: none;
+    }
+    .edit-item-row {
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    /* Loader Animation */
+    .spin {
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+
+    /* ADMIN ADD SERVICES BUTTON STYLES */
+    .admin-add-service-btn-wrapper {
+      margin-top: 25px;
+      margin-bottom: 15px;
+      display: none; /* Only visible in Admin Edit Mode */
+    }
+    .btn-admin-add {
+      background: linear-gradient(135deg, #111111 0%, #333333 100%);
+      color: #ffffff;
+      border: 2px dashed #ffffff;
+      padding: 16px;
+      border-radius: 18px;
+      font-weight: 800;
+      font-size: 15px;
+      width: 100%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      transition: transform 0.2s ease;
+    }
+    .btn-admin-add:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SPLASH ANIMATION SCREEN -->
+  <div id="splashScreen">
+    <div class="splash-logo-wrapper">
+      <svg class="splash-ring" width="140" height="140" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="46" stroke="#ffffff" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div class="splash-logo-circle">
+        <img src="https://plain-apac-prod-public.komododecks.com/202609/18/D5qgUUquoxSmfKMM1pCm/image.png" alt="Yaaden Studio Logo" />
+      </div>
+    </div>
+    <div class="splash-tagline">सपनों के रंग Yaaden के संग</div>
+    <div class="splash-sub">Yaaden Studio</div>
+  </div>
+
+  <div class="app-container">
+    
+    <div class="brand-logo-container">
+      <div class="brand-logo-circle">
+        <img src="https://plain-apac-prod-public.komododecks.com/202609/18/D5qgUUquoxSmfKMM1pCm/image.png" alt="Yaaden Studio Logo" />
+      </div>
+    </div>
+
+    <!-- Top Header -->
+    <div class="header">
+      <div class="brand-title">Yaaden Studio</div>
+      <div class="header-icons">
+        <div class="icon-btn-badge" onclick="openCartModal()">
+          <i data-lucide="shopping-cart" size="18"></i>
+          <span class="badge" id="topCartBadge">0</span>
+        </div>
+        <button class="close-btn" style="background:none; border:none; cursor:pointer;"><i data-lucide="x" size="18"></i></button>
+      </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-box">
+      <i data-lucide="search" size="18" color="#999"></i>
+      <input type="text" id="searchInput" onkeyup="filterServices()" placeholder="Search for photo services..." />
+      <i data-lucide="sliders-horizontal" class="filter-btn" size="18"></i>
+    </div>
+
+    <!-- Hero Banner -->
+    <div class="promo-card">
+      <div class="promo-tag">Special 20% Off</div>
+      <div class="promo-title">On Premium Frame & Studio Shoots</div>
+      <button class="promo-btn">Explore Plans</button>
+      <div class="promo-illustration">
+        <i data-lucide="image" size="64" color="#2e7d32" style="opacity: 0.3;"></i>
+      </div>
+    </div>
+
+    <div class="section-header-title">OUR SERVICES</div>
+    <div class="section-header-underline"></div>
+
+    <!-- 1. Photo shot Division -->
+    <div class="division-master-block" id="div-Photoshot">
+      <div class="division-header-title">
+        <i data-lucide="camera" size="20" color="#111"></i> Photoshot
+      </div>
+      <div class="services-grid" id="grid-Photoshot">
+        <div class="service-card" onclick="handleServiceClick('Photo shot', () => openPhotoShotModal('Photo shot'))">
+          <div>
+            <div class="service-icon-wrapper"><i data-lucide="aperture" size="18"></i></div>
+            <div class="service-name">Photo shot</div>
+            <div class="service-desc">Passport to 12×18 prints with photo upload.</div>
+          </div>
+          <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
+        </div>
+
+        <div class="service-card" onclick="handleServiceClick('Photo session', () => openPhotoSessionModal('Photo session'))">
+          <div>
+            <div class="service-icon-wrapper"><i data-lucide="camera" size="18"></i></div>
+            <div class="service-name">Photo session</div>
+            <div class="service-desc">Dedicated studio portraits with photo upload.</div>
+          </div>
+          <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
+        </div>
+
+        <div class="service-card" onclick="handleServiceClick('Kids photography', () => openKidsPhotoModal('Kids photography'))">
+          <div>
+            <div class="service-icon-wrapper"><i data-lucide="smile" size="18"></i></div>
+            <div class="service-name">Kids photography</div>
+            <div class="service-desc">8×10 to 10×15 size baby shoots.</div>
+          </div>
+          <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
+        </div>
+
+        <div class="service-card" onclick="handleServiceClick('Marriages purpose Photography', () => openMarriagePhotoModal('Marriages purpose Photography'))">
+          <div>
+            <div class="service-icon-wrapper"><i data-lucide="heart" size="18"></i></div>
+            <div class="service-name">Marriages purpose Photography</div>
+            <div class="service-desc">5×7, 6×8 & 4×6 portrait sizes.</div>
+          </div>
+          <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
+        </div>
+
+        <div class="service-card" onclick="handleServiceClick('Student passbook photo', () => openStudentPassportModal('Student passbook photo'))">
+          <div>
+            <div class="service-icon-wrapper"><i data-lucide="user-check" size="18"></i></div>
+            <div class="service-name">Student passbook photo</div>
+            <div class="service-desc">Passport copies & 2UP / B2 sizes.</div>
+          </div>
+          <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
+        </div>
+
+        <div class="service-card" onclick="openOutdoorPhotographyModal()">
+          <div>
+            <div class="service-icon-wrapper"><i data-lucide="sun" size="18"></i></div>
+            <div class="service-name">Outdoor Photography</div>
+            <div class="service-desc">Natural location portraitures.</div>
+          </div>
+          <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Videoshot Division -->
+    <div class="division-master-block" id="div-Videoshot Division">
+      <div class="division-header-title">
+        <i data-lucide="video" size="20" color="#111"></i> Videoshot Division
+      </div>
+      <div class="services-grid" id="grid-Videoshot Division">
+        <div class="service-card" onclick="handleServiceClick('Videography', () => sendWhatsAppOrder('Videography', 'Videoshot Division'))">
+          <div>
+            <div class="service-icon-wrapper"><i data-lucide="video" size="18"></i></div>
+            <div class="service-name">Videography</div>
+            <div class="service-desc">High-definition event recording.</div>
+          </div>
+          <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
+        </div>
+
+        <div class="service-card" onclick="handleServiceClick('Candid photo', () => sendWhatsAppOrder('Candid photo', 'Videoshot Division'))">
+          <div>
+            <div class="service-icon-wrapper"><i data-lucide="eye" size="18"></i></div>
+            <div class="service-name">Candid photo</div>
+            <div class="service-desc">Natural unposed memories.</div>
+          </div>
+          <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
+        </div>
+
+        <div class="service-card" onclick="handleServiceClick('Cinematic Videography', () => sendWhatsAppOrder('Cinematic Videography', 'Videoshot Division'))">
+          <div>
+            <div class="service-icon-wrapper"><i data-lucide="film" size="18"></i></div>
+            <div class="service-name">Cinematic Videography</div>
+            <div class="service-desc">Movie-style event editing.</div>
+          </div>
+          <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Photo printing Division -->
+    <div class="division-master-block" id="div-Photo printing Division">
+      <div class="division-header-title">
+        <i data-lucide="printer" size="20" color="#111"></i> Photo printing Division
+      </div>
+      <div class="services-grid" id="grid-Photo printing Division">
+        <div class="service-card" onclick="handleServiceClick('All size photo printing', () => openAllSizePrintingModal())">
+          <div>
+            <div class="service-icon-wrapper"><i data-lucide="file-text" size="18"></i></div>
+            <div class="service-name">All size photo printing</div>
+            <div class="service-desc">Wallet size to mega posters.</div>
+          </div>
+          <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
+        </div>
+
+        <div class="service-card" onclick="handleServiceClick('Silver print', () => openAllSizePrintingModal('Silver print'))">
+          <div>
+            <div class="service-icon-wrapper"><i data-lucide="layers" size="18"></i></div>
+            <div class="service-name">Silver print</div>
+            <div class="service-desc">Traditional silver halide prints.</div>
+          </div>
+          <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
+        </div>
+
+        <div class="service-card" onclick="handleServiceClick('Ink jet printing', () => openInkjetPrintingModal())">
+          <div>
+            <div class="service-icon-wrapper"><i data-lucide="printer" size="18"></i></div>
+            <div class="service-name">Ink jet printing</div>
+            <div class="service-desc">Ultra-vibrant inkjet outputs.</div>
+          </div>
+          <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
+        </div>
+
+        <div class="service-card" onclick="handleServiceClick('Photobook printing', () => openPhotobookModal())">
+          <div>
+            <div class="service-icon-wrapper"><i data-lucide="book-open" size="18"></i></div>
+            <div class="service-name">Photobook printing</div>
+            <div class="service-desc">Custom bound story books.</div>
+          </div>
+          <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
+        </div>
+
+        <div class="service-card" onclick="handleServiceClick('Cup printing', () => openCupPrintingModal())">
+          <div>
+            <div class="service-icon-wrapper"><i data-lucide="coffee" size="18"></i></div>
+            <div class="service-name">Cup printing</div>
+            <div class="service-desc">Personalized coffee mugs.</div>
+          </div>
+          <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Photoframe Division -->
+    <div class="division-master-block" id="div-Photoframe Division">
+      <div class="division-header-title">
+        <i data-lucide="square" size="20" color="#111"></i> Photoframe Division
+      </div>
+      <div class="services-grid" id="grid-Photoframe Division">
+        <div class="service-card" onclick="handleServiceClick('All size photo frame', () => sendWhatsAppOrder('All size photo frame', 'Photoframe Division'))">
+          <div>
+            <div class="service-icon-wrapper"><i data-lucide="frame" size="18"></i></div>
+            <div class="service-name">All size photo frame</div>
+            <div class="service-desc">Wooden & synthetic frames.</div>
+          </div>
+          <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
+        </div>
+
+        <div class="service-card" onclick="handleServiceClick('Acrylic', () => sendWhatsAppOrder('Acrylic', 'Photoframe Division'))">
+          <div>
+            <div class="service-icon-wrapper"><i data-lucide="layout" size="18"></i></div>
+            <div class="service-name">Acrylic</div>
+            <div class="service-desc">Glossy crystal clear mounts.</div>
+          </div>
+          <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
+        </div>
+
+        <div class="service-card" onclick="handleServiceClick('Led frame', () => sendWhatsAppOrder('Led frame', 'Photoframe Division'))">
+          <div>
+            <div class="service-icon-wrapper"><i data-lucide="zap" size="18"></i></div>
+            <div class="service-name">Led frame</div>
+            <div class="service-desc">Backlit glowing photo frames.</div>
+          </div>
+          <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Sale Division -->
+    <div class="division-master-block" id="div-Sale Division">
+      <div class="division-header-title">
+        <i data-lucide="shopping-bag" size="20" color="#111"></i> Sale Division
+      </div>
+      <div class="services-grid" id="grid-Sale Division">
+        <div class="service-card" onclick="handleServiceClick('All Photographic Materials', () => sendWhatsAppOrder('All Photographic Materials', 'Sale Division'))">
+          <div>
+            <div class="service-icon-wrapper"><i data-lucide="package" size="18"></i></div>
+            <div class="service-name">All Photographic Materials</div>
+            <div class="service-desc">Papers, albums & accessories.</div>
+          </div>
+          <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
+        </div>
+
+        <div class="service-card" onclick="handleServiceClick('Camera', () => sendWhatsAppOrder('Camera', 'Sale Division'))">
+          <div>
+            <div class="service-icon-wrapper"><i data-lucide="camera" size="18"></i></div>
+            <div class="service-name">Camera</div>
+            <div class="service-desc">DSLR & mirrorless devices.</div>
+          </div>
+          <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
+        </div>
+
+        <div class="service-card" onclick="handleServiceClick('Trypod', () => sendWhatsAppOrder('Trypod', 'Sale Division'))">
+          <div>
+            <div class="service-icon-wrapper"><i data-lucide="sliders" size="18"></i></div>
+            <div class="service-name">Trypod</div>
+            <div class="service-desc">Sturdy capture supports.</div>
+          </div>
+          <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
+        </div>
+
+        <div class="service-card" onclick="handleServiceClick('Camera stand', () => sendWhatsAppOrder('Camera stand', 'Sale Division'))">
+          <div>
+            <div class="service-icon-wrapper"><i data-lucide="anchor" size="18"></i></div>
+            <div class="service-name">Camera stand</div>
+            <div class="service-desc">Heavy duty professional stands.</div>
+          </div>
+          <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- YAADEN NEWS SECTION (AFTER SERVICES) -->
+    <div class="news-section-card" id="yaadenNewsBlock">
+      <div class="news-title-header">
+        <i data-lucide="newspaper" size="20" color="#111"></i> Yaaden News
+      </div>
+      <div id="newsContentWrapper">
+        <div class="news-slider-wrapper">
+          <div class="news-slider-track" id="newsSliderTrack">
+            <img class="news-slide-img" src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=600&q=80" alt="News Image 1" />
+            <img class="news-slide-img" src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80" alt="News Image 2" />
+          </div>
+        </div>
+        <div class="news-desc-box" id="newsDescDisplay">
+Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur grand shoots ki khabrein milengi. Slide karke sabhi photos dekhein.
+        </div>
+      </div>
+      <!-- ADMIN EDIT CONTROLS FOR NEWS -->
+      <div class="news-admin-actions" id="newsAdminControls">
+        <button class="btn-news-action btn-news-remove" onclick="removeActiveNews()">
+          <i data-lucide="trash-2" size="16"></i> Remove News
+        </button>
+        <button class="btn-news-action btn-news-add" onclick="openAddNewsModal()">
+          <i data-lucide="plus-circle" size="16"></i> Add New News
+        </button>
+      </div>
+    </div>
+
+    <!-- MAKE ORDER CARD -->
+    <div class="make-order-card">
+      <div class="make-order-title">MAKE AN ORDER</div>
+      <div class="make-order-desc">Aap direct call karke ya WhatsApp par photo bhej kar apna order start kar sakte hain.</div>
+      <div class="order-action-btns">
+        <a href="tel:+917004007372" class="order-act-btn btn-call">
+          <i data-lucide="phone" size="16"></i> Call Us
+        </a>
+        <a href="https://wa.me/917004007372?text=Hello%20Yaaden%20Studio,%20I%20want%20to%20make%20an%20order." target="_blank" class="order-act-btn btn-wa">
+          <i data-lucide="message-circle" size="16"></i> WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <!-- ABOUT US SECTION -->
+    <div class="info-card-block">
+      <div class="info-card-title">
+        <i data-lucide="info" size="20" color="#111"></i> About Us (Estd: 1998)
+      </div>
+      <p class="about-text">
+        Welcome to <strong>Yaaden</strong> Studio! Hum aapse judi har haseen aur yaadgaar moments ko hamesha ke liye album, frames aur digital prints me kaid karne me mahir hain. Pichle kai saalon se hum high-quality canvas printing, premium wedding Karizma albums, personalized gift mugs, digital visiting cards aur modern photo frames ki best-in-class printing service provide kar rahe hain. Hamari lab latest German technology machinery aur original non-fading colors ka estemal karti hai taaki aapki photos hamesha nayi jaisi chamakti rahein.
+      </p>
+      <div class="founder-box">
+        <i data-lucide="award" size="18" color="#111"></i> Founder: B.N 'Singh. "Pappan"
+      </div>
+    </div>
+
+    <!-- TERMS AND CONDITIONS SECTION -->
+    <div class="info-card-block">
+      <div class="info-card-title">
+        <i data-lucide="file-text" size="20" color="#111"></i> Terms & Conditions
+      </div>
+      <ul class="terms-list">
+        <li>
+          <i data-lucide="check-circle" size="14" color="#2e7d32"></i>
+          <span><strong>Advance Payment:</strong> Order confirm karne ke liye 50% advance payment zaroori hai.</span>
+        </li>
+        <li>
+          <i data-lucide="check-circle" size="14" color="#2e7d32"></i>
+          <span><strong>Delivery Time:</strong> Standard photo frames aur printing orders 2-3 dino me taiyar ho jate hain.</span>
+        </li>
+        <li>
+          <i data-lucide="check-circle" size="14" color="#2e7d32"></i>
+          <span><strong>Data Safety:</strong> Aapke personal photos aur media files ki poori privacy rakhi jati hai.</span>
+        </li>
+        <li>
+          <i data-lucide="check-circle" size="14" color="#2e7d32"></i>
+          <span><strong>Approval:</strong> Custom albums aur high-end frames print hone se pehle digital layout verify kiya jata hai.</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- OPENING HOURS SECTION -->
+    <div class="info-card-block">
+      <div class="info-card-title">
+        <i data-lucide="clock" size="20" color="#111"></i> Opening Hours
+      </div>
+      <div class="timing-row">
+        <span>Monday - Saturday:</span>
+        <strong style="color: #2e7d32;">09:00 AM - 09:00 PM</strong>
+      </div>
+      <div class="timing-row">
+        <span>Sunday:</span>
+        <strong style="color: #ff6b35;">10:00 AM - 05:00 PM</strong>
+      </div>
+    </div>
+
+    <!-- CONTACTS & SOCIAL SECTION -->
+    <div class="info-card-block">
+      <div class="info-card-title">
+        <i data-lucide="share-2" size="20" color="#111"></i> Connect With Us
+      </div>
+      <div class="social-links-grid">
+        <a href="https://instagram.com" target="_blank" class="social-btn">
+          <i data-lucide="instagram" size="16" color="#e1306c"></i> Instagram
+        </a>
+        <a href="https://facebook.com" target="_blank" class="social-btn">
+          <i data-lucide="facebook" size="16" color="#1877f2"></i> Facebook
+        </a>
+        <a href="https://youtube.com" target="_blank" class="social-btn">
+          <i data-lucide="youtube" size="16" color="#ff0000"></i> YouTube
+        </a>
+        <a href="mailto:info@yaadenstudio.com" class="social-btn">
+          <i data-lucide="mail" size="16" color="#333"></i> Email Us
+        </a>
+      </div>
+    </div>
+
+    <!-- GALLERY -->
+    <div class="info-card-block">
+      <div class="info-card-title">
+        <i data-lucide="grid" size="20" color="#111"></i> Our Work Gallery
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=400&q=80');"></div>
+        <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=400&q=80');"></div>
+        <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=80');"></div>
+        <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=400&q=80');"></div>
+        <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=400&q=80');"></div>
+        <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=400&q=80');"></div>
+        <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=400&q=80');"></div>
+        <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=400&q=80');"></div>
+        <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1509924603848-aca5e5f276d7?auto=format&fit=crop&w=400&q=80');"></div>
+        <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80');"></div>
+      </div>
+    </div>
+
+    <!-- REVIEWS SECTION -->
+    <div class="info-card-block">
+      <div class="info-card-title">
+        <i data-lucide="star" size="20" color="#111"></i> Customer Reviews
+      </div>
+
+      <div class="reviews-scroll-container" id="reviewsContainer">
+        <div class="review-card">
+          <div class="review-header"><span class="reviewer-name">Rahul Sharma</span><span class="stars">★★★★★</span></div>
+          <div class="review-comment">Best Canvas print quality in town! Canvas ki finish ekdum royal hai.</div>
+        </div>
+        <div class="review-card">
+          <div class="review-header"><span class="reviewer-name">Priya Verma</span><span class="stars">★★★★★</span></div>
+          <div class="review-comment">Shaadi ka album bohot shaandar banaya. Colors ekdum sharp hain!</div>
+        </div>
+      </div>
+
+      <div class="add-review-box">
+        <div style="font-size: 13px; font-weight: 700; margin-bottom: 8px;">Write a Review</div>
+        <input type="text" id="revName" placeholder="Your Name">
+        <textarea id="revComment" rows="2" placeholder="Write your experience..."></textarea>
+        <button class="btn-main" onclick="addNewReview()" style="padding: 8px; font-size: 12px;">Submit Review</button>
+      </div>
+    </div>
+
+    <!-- LOCATION -->
+    <div class="info-card-block">
+      <div class="info-card-title">
+        <i data-lucide="map-pin" size="20" color="#111"></i> Our Location
+      </div>
+      <div style="width: 100%; height: 180px; border-radius: 14px; overflow: hidden; border: 1px solid #ddd;">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3501.980649725838!2d77.20902121508253!3d28.613939182424266!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce2db961be393%3A0xf6c7d70c79ab356!2sConnaught%20Place!5e0!3m2!1sen!2sin!4v1625000000000!5m2!1sen!2sin" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <!-- ADMIN PANEL ADD SERVICES BUTTON (VISIBLE WHEN EDIT MODE IS ON) -->
+    <div class="admin-add-service-btn-wrapper" id="adminAddServiceBtnWrapper">
+      <button class="btn-admin-add" onclick="openAdminAddServiceModal()">
+        <i data-lucide="plus-circle" size="20"></i> ➕ ADD SERVICES (ADMIN)
+      </button>
+    </div>
+
+    <div class="footer-branding">
+      <div class="trust-tagline">सपनों के रंग Yaaden के संग</div>
+      <div class="brand-subline">FROM YAADEN STUDIO</div>
+    </div>
+
+    <!-- Floating Navigation Bar -->
+    <div class="bottom-nav-container">
+      <div class="bottom-nav">
+        <button class="nav-item active" id="editToggleNavBtn" onclick="toggleEditMode()">
+          <i data-lucide="edit-3" size="18"></i>
+          <span id="editNavText">Edit</span>
+        </button>
+        <button class="nav-item">
+          <i data-lucide="tag" size="18"></i>
+          <span>Pricing</span>
+        </button>
+        <button class="nav-item" onclick="openCartModal()">
+          <i data-lucide="shopping-cart" size="18"></i>
+          <span>Cart</span>
+          <span class="badge" id="bottomCartBadge" style="position: absolute; top: 2px; right: 10px;">0</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CART MODAL -->
+  <div class="modal-overlay" id="cartModalOverlay">
+    <div class="modal-content">
+      <i data-lucide="x" class="close-modal-icon" size="20" onclick="closeModals()"></i>
+
+      <div style="text-align: center; margin-bottom: 10px;">
+        <i data-lucide="shopping-cart" size="32" color="#111"></i>
+        <h3 style="font-size: 18px; font-weight: 800; margin-top: 4px;">Your Cart Orders</h3>
+      </div>
+
+      <div class="cart-items-container" id="cartItemsList"></div>
+
+      <div id="cartFooterSection" style="display: none;">
+        <button class="btn-main" style="background: #25D366; color: #fff;" onclick="sendFullCartToWhatsApp()">
+          <i data-lucide="message-square" size="18"></i> Send Complete Order on WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DYNAMIC SERVICE MODAL -->
+  <div class="modal-overlay" id="customPrintModalOverlay">
+    <div class="modal-content" id="customPrintModalContent"></div>
+  </div>
+
+  <!-- EDIT SERVICE MODAL -->
+  <div class="modal-overlay" id="editServiceModalOverlay">
+    <div class="modal-content" id="editServiceModalContent"></div>
+  </div>
+
+  <!-- ADMIN ADD SERVICE MODAL -->
+  <div class="modal-overlay" id="adminAddServiceModalOverlay">
+    <div class="modal-content" id="adminAddServiceModalContent"></div>
+  </div>
+
+  <!-- ADMIN ADD NEWS MODAL -->
+  <div class="modal-overlay" id="adminAddNewsModalOverlay">
+    <div class="modal-content" id="adminAddNewsModalContent"></div>
+  </div>
+
+  <!-- HIDDEN REAL FILE INPUT FOR USER UPLOAD -->
+  <input type="file" id="globalImageFileInput" accept="image/*" style="display:none;" onchange="handleUserFileUploaded(event)">
+
+  <script>
+    lucide.createIcons();
+
+    // ImgBB Details
+    const imgbbApiKey = "7b777eaa7e91d65be4275d01537c3ada";
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const splash = document.getElementById('splashScreen');
+        splash.style.opacity = '0';
+        setTimeout(() => {
+          splash.style.display = 'none';
+        }, 600);
+      }, 2200);
+    });
+
+    let cart = [];
+    const targetWhatsAppNumber = "7004007372";
+    let userSelectedPhotoUrl = '';
+    let isUploading = false;
+    let activePreviewImgId = 'allSizePreviewImg';
+
+    // YAADEN NEWS DATA STORE
+    let currentNewsData = {
+      photos: [
+        'https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80'
+      ],
+      description: 'Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur grand shoots ki khabrein milengi. Slide karke sabhi photos dekhein.'
+    };
+
+    // EDIT MODE VARIABLES & DATA STORES
+    let isEditModeActive = false;
+    const SECRET_PASS = "yaaden1998";
+
+    let photoShotServiceData = {
+      'Photo shot': [
+        { size: 'Passport', qty: '20 pcs', price: '₹250.00' },
+        { size: 'PC', qty: '3 pcs', price: '₹200.00' },
+        { size: '4×6', qty: '3 pcs', price: '₹300.00' },
+        { size: '5×7', qty: '3 pcs', price: '₹400.00' },
+        { size: '6×8', qty: '3 pcs', price: '₹550.00' },
+        { size: '8×10', qty: '1 pcs', price: '₹350.00' },
+        { size: '8×12', qty: '1 pcs', price: '₹450.00' },
+        { size: '10×12', qty: '1 pcs', price: '₹500.00' },
+        { size: '10×15', qty: '1 pcs', price: '₹600.00' },
+        { size: '12×18', qty: '1 pcs', price: '₹900.00' }
+      ],
+      'Photo session': [
+        { size: '4×6', qty: '1 pcs', price: '₹250.00' },
+        { size: '5×7', qty: '1 pcs', price: '₹300.00' },
+        { size: '6×8', qty: '1 pcs', price: '₹400.00' },
+        { size: '8×10', qty: '1 pcs', price: '₹600.00' },
+        { size: '8×12', qty: '3 pcs', price: '₹2,500.00' },
+        { size: '10×12', qty: '3 pcs', price: '₹2,350.00' },
+        { size: '10×15', qty: '1 pcs', price: '₹2,400.00' },
+        { size: '12×18', qty: '1 pcs', price: '₹800.00' }
+      ],
+      'Kids photography': [
+        { size: '8×10', qty: '1 pcs', price: '₹2,500.00' },
+        { size: '8×12', qty: '1 pcs', price: '₹2,600.00' },
+        { size: '10×12', qty: '1 pcs', price: '₹2,700.00' },
+        { size: '10×15', qty: '1 pcs', price: '₹2,800.00' }
+      ],
+      'Marriages purpose Photography': [
+        { size: '5×7', qty: '3 pcs', price: '₹2,500.00' },
+        { size: '6×8', qty: '3 pcs', price: '₹2,550.00' },
+        { size: '4×6', qty: '3 pcs', price: '₹2,100.00' }
+      ],
+      'Student passbook photo': [
+        { size: 'Passport', qty: '20 pcs', price: '₹250.00' },
+        { size: 'Passport', qty: '8 pcs', price: '₹140.00' },
+        { size: 'Passport', qty: '4 pcs', price: '₹80.00' },
+        { size: '2 UP', qty: '4 pcs', price: '₹70.00' },
+        { size: 'B2', qty: '1 pcs', price: '₹60.00' }
+      ]
+    };
+
+    let allSizePrintingData = [
+      { size: '20UP', price: '₹50.00', scale: 0.9 },
+      { size: 'PC', price: '₹10.00', scale: 0.95 },
+      { size: '4×6', price: '₹15.00', scale: 1.0 },
+      { size: '5×7', price: '₹20.00', scale: 1.1 },
+      { size: '6×8', price: '₹50.00', scale: 1.2 },
+      { size: '6×9', price: '₹60.00', scale: 1.25 },
+      { size: '8×10', price: '₹150.00', scale: 1.35 },
+      { size: '8×11', price: '₹175.00', scale: 1.4 },
+      { size: '8×12', price: '₹200.00', scale: 1.45 },
+      { size: '10×12', price: '₹250.00', scale: 1.55 },
+      { size: '10×15', price: '₹300.00', scale: 1.65 }
+    ];
+
+    let inkjetPrintingData = [
+      { size: '12×16', price: '400' },
+      { size: '12×18', price: '450' },
+      { size: '18×24', price: '1050' },
+      { size: '20×30', price: '1500' },
+      { size: '24×36', price: '2000' }
+    ];
+
+    let photobookPrintingData = [
+      { finish: 'NTR', rate: '₹130 per sq. ft' },
+      { finish: 'Glossy', rate: '₹120 per sq. ft' },
+      { finish: 'Mat', rate: '₹150 per sq. ft' },
+      { finish: 'Designing', rate: '₹40 per sq. ft' }
+    ];
+
+    let cupPrintingPrice = '₹250.00 (with Cup)';
+
+    let genericServicesPriceData = {};
+
+    function toggleEditMode() {
+      if (!isEditModeActive) {
+        let pass = prompt("Enter Edit Password:");
+        if (pass === SECRET_PASS) {
+          isEditModeActive = true;
+          document.getElementById('editNavText').innerText = 'Editing ON';
+          document.getElementById('editToggleNavBtn').style.background = '#ff3b30';
+          document.getElementById('editToggleNavBtn').style.color = '#fff';
+          document.getElementById('adminAddServiceBtnWrapper').style.display = 'block';
+          document.getElementById('newsAdminControls').style.display = 'flex';
+          alert("Admin Edit Mode Active! Ab aap services edit kar sakte hain, naye service add kar sakte hain aur Yaaden News manage kar sakte hain.");
+        } else {
+          alert("Incorrect Password!");
+        }
+      } else {
+        isEditModeActive = false;
+        document.getElementById('editNavText').innerText = 'Edit';
+        document.getElementById('editToggleNavBtn').style.background = 'transparent';
+        document.getElementById('editToggleNavBtn').style.color = '#666';
+        document.getElementById('adminAddServiceBtnWrapper').style.display = 'none';
+        document.getElementById('newsAdminControls').style.display = 'none';
+        alert("Edit Mode Off ho gaya hai.");
+      }
+    }
+
+    function handleServiceClick(serviceName, defaultAction) {
+      if (isEditModeActive) {
+        openEditServiceModal(serviceName);
+      } else {
+        defaultAction();
+      }
+    }
+
+    /* --- YAADEN NEWS FUNCTIONS --- */
+
+    function renderNewsUI() {
+      const track = document.getElementById('newsSliderTrack');
+      const desc = document.getElementById('newsDescDisplay');
+
+      if (!currentNewsData.photos || currentNewsData.photos.length === 0) {
+        track.innerHTML = `<div style="color:#fff; display:flex; align-items:center; justify-content:center; width:100%; font-size:13px;">No News Photos Available</div>`;
+      } else {
+        track.innerHTML = currentNewsData.photos.map(p => `<img class="news-slide-img" src="${p}" alt="News Image" />`).join('');
+      }
+
+      desc.innerText = currentNewsData.description || 'No News Description Available.';
+    }
+
+    function removeActiveNews() {
+      if (confirm("Kya aap sach me iss News ko remove karna chahte hain?")) {
+        currentNewsData = { photos: [], description: 'Filhal koi news available nahi hai.' };
+        renderNewsUI();
+        alert("News successfully remove kar di gayi hai!");
+      }
+    }
+
+    let tempNewsUploadedPhotos = [];
+
+    function openAddNewsModal() {
+      tempNewsUploadedPhotos = [];
+      const modal = document.getElementById('adminAddNewsModalOverlay');
+      const content = document.getElementById('adminAddNewsModalContent');
+
+      content.innerHTML = `
+        <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeAddNewsModal()"></i>
+        <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 6px;">Add New News</h3>
+        <p style="font-size: 12px; color: #666; margin-bottom: 16px;">Minimum 1 aur Maximum 3 photos upload karein, aur description dalein.</p>
+
+        <div class="edit-field-group">
+          <label>Upload Photos (Max 3)</label>
+          <input type="file" id="newsPhotoFilesInput" accept="image/*" multiple onchange="handleNewsPhotosSelected(event)">
+          <div id="newsUploadedStatus" style="font-size:12px; font-weight:700; color:#2e7d32; margin-top:6px;"></div>
+        </div>
+
+        <div class="edit-field-group">
+          <label>News Description (Up to 7000 Lines)</label>
+          <textarea id="newsDescriptionInput" rows="10" placeholder="Yaha par news ka poora detail description likhein..."></textarea>
+        </div>
+
+        <button class="btn-main" id="uploadNewsSubmitBtn" onclick="submitNewNews()" style="background:#2e7d32;">
+          <i data-lucide="upload" size="18"></i> Upload News
+        </button>
+      `;
+
+      modal.style.display = 'flex';
+      lucide.createIcons();
+    }
+
+    function closeAddNewsModal() {
+      document.getElementById('adminAddNewsModalOverlay').style.display = 'none';
+    }
+
+    async function handleNewsPhotosSelected(e) {
+      const files = Array.from(e.target.files);
+      if (files.length === 0) return;
+
+      if (files.length > 3) {
+        alert("Aap maximum 3 photos hi upload kar sakte hain!");
+        e.target.value = "";
+        return;
+      }
+
+      tempNewsUploadedPhotos = [];
+      const statusEl = document.getElementById('newsUploadedStatus');
+      const btn = document.getElementById('uploadNewsSubmitBtn');
+
+      btn.style.opacity = '0.5';
+      btn.style.pointerEvents = 'none';
+      statusEl.innerText = "Photos upload ho rahi hain, kripya intezar karein...";
+
+      for (let i = 0; i < files.length; i++) {
+        const formData = new FormData();
+        formData.append("image", files[i]);
+
+        try {
+          const res = await fetch(`https://api.imgbb.com/1/upload?key=${imgbbApiKey}`, {
+            method: "POST",
+            body: formData
+          });
+          const data = await res.json();
+          if (data.success) {
+            tempNewsUploadedPhotos.push(data.data.url);
+          }
+        } catch (err) {
+          console.error("News Photo Upload Error:", err);
+        }
+      }
+
+      btn.style.opacity = '1';
+      btn.style.pointerEvents = 'auto';
+      statusEl.innerText = `${tempNewsUploadedPhotos.length} Photo(s) ready hain upload karne ke liye!`;
+    }
+
+    function submitNewNews() {
+      const descText = document.getElementById('newsDescriptionInput').value;
+
+      if (tempNewsUploadedPhotos.length < 1) {
+        alert("Kripya kam se kam 1 photo upload karein (Maximum 3)!");
+        return;
+      }
+
+      if (!descText.trim()) {
+        alert("Kripya news ka description dalein!");
+        return;
+      }
+
+      currentNewsData.photos = tempNewsUploadedPhotos;
+      currentNewsData.description = descText;
+
+      renderNewsUI();
+      alert("Nayi News successfully upload ho gayi hai!");
+      closeAddNewsModal();
+    }
+
+    function openEditServiceModal(serviceName) {
+      const modal = document.getElementById('editServiceModalOverlay');
+      const content = document.getElementById('editServiceModalContent');
+
+      let html = `
+        <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeEditModal()"></i>
+        <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 6px;">Edit: ${serviceName}</h3>
+        <p style="font-size: 12px; color: #666; margin-bottom: 16px;">Price, Size, Quantity / Pcs me badlav karein.</p>
+      `;
+
+      if (photoShotServiceData[serviceName]) {
+        let items = photoShotServiceData[serviceName];
+        html += `<div style="display:flex; flex-direction:column; gap:10px; max-height: 350px; overflow-y:auto; margin-bottom:15px;">`;
+        items.forEach((item, idx) => {
+          html += `
+            <div class="edit-item-row">
+              <div style="font-size: 11px; font-weight: 800; color:#555; margin-bottom:6px;">Package #${idx + 1}</div>
+              <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px;">
+                <div class="edit-field-group" style="margin:0;">
+                  <label>Size</label>
+                  <input type="text" id="edit_ps_size_${idx}" value="${item.size}">
+                </div>
+                <div class="edit-field-group" style="margin:0;">
+                  <label>Pcs/Qty</label>
+                  <input type="text" id="edit_ps_qty_${idx}" value="${item.qty}">
+                </div>
+                <div class="edit-field-group" style="margin:0;">
+                  <label>Price</label>
+                  <input type="text" id="edit_ps_price_${idx}" value="${item.price}">
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        html += `</div>`;
+        html += `<button class="btn-main" onclick="savePhotoShotEdit('${serviceName}')">Save Changes</button>`;
+      } 
+      else if (serviceName === 'All size photo printing' || serviceName === 'Silver print') {
+        html += `<div style="display:flex; flex-direction:column; gap:10px; max-height: 350px; overflow-y:auto; margin-bottom:15px;">`;
+        allSizePrintingData.forEach((item, idx) => {
+          html += `
+            <div class="edit-item-row">
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                <div class="edit-field-group" style="margin:0;">
+                  <label>Size</label>
+                  <input type="text" id="edit_as_size_${idx}" value="${item.size}">
+                </div>
+                <div class="edit-field-group" style="margin:0;">
+                  <label>Price</label>
+                  <input type="text" id="edit_as_price_${idx}" value="${item.price}">
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        html += `</div>`;
+        html += `<button class="btn-main" onclick="saveAllSizeEdit()">Save Changes</button>`;
+      }
+      else if (serviceName === 'Ink jet printing') {
+        html += `<div style="display:flex; flex-direction:column; gap:10px; max-height: 350px; overflow-y:auto; margin-bottom:15px;">`;
+        inkjetPrintingData.forEach((item, idx) => {
+          html += `
+            <div class="edit-item-row">
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                <div class="edit-field-group" style="margin:0;">
+                  <label>Size</label>
+                  <input type="text" id="edit_ij_size_${idx}" value="${item.size}">
+                </div>
+                <div class="edit-field-group" style="margin:0;">
+                  <label>Price (₹)</label>
+                  <input type="text" id="edit_ij_price_${idx}" value="${item.price}">
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        html += `</div>`;
+        html += `<button class="btn-main" onclick="saveInkjetEdit()">Save Changes</button>`;
+      }
+      else if (serviceName === 'Photobook printing') {
+        html += `<div style="display:flex; flex-direction:column; gap:10px; max-height: 350px; overflow-y:auto; margin-bottom:15px;">`;
+        photobookPrintingData.forEach((item, idx) => {
+          html += `
+            <div class="edit-item-row">
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                <div class="edit-field-group" style="margin:0;">
+                  <label>Finish</label>
+                  <input type="text" id="edit_pb_finish_${idx}" value="${item.finish}">
+                </div>
+                <div class="edit-field-group" style="margin:0;">
+                  <label>Rate</label>
+                  <input type="text" id="edit_pb_rate_${idx}" value="${item.rate}">
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        html += `</div>`;
+        html += `<button class="btn-main" onclick="savePhotobookEdit()">Save Changes</button>`;
+      }
+      else if (serviceName === 'Cup printing') {
+        html += `
+          <div class="edit-field-group">
+            <label>Price & Description</label>
+            <input type="text" id="edit_cup_price" value="${cupPrintingPrice}">
+          </div>
+          <button class="btn-main" onclick="saveCupEdit()">Save Changes</button>
+        `;
+      }
+      else {
+        let currentPrice = genericServicesPriceData[serviceName] || "Contact for Price";
+        html += `
+          <div class="edit-field-group">
+            <label>Service Price / Package</label>
+            <input type="text" id="edit_generic_price" value="${currentPrice}">
+          </div>
+          <button class="btn-main" onclick="saveGenericEdit('${serviceName}')">Save Changes</button>
+        `;
+      }
+
+      content.innerHTML = html;
+      modal.style.display = 'flex';
+      lucide.createIcons();
+    }
+
+    function closeEditModal() {
+      document.getElementById('editServiceModalOverlay').style.display = 'none';
+    }
+
+    function savePhotoShotEdit(serviceName) {
+      let items = photoShotServiceData[serviceName];
+      items.forEach((item, idx) => {
+        item.size = document.getElementById(`edit_ps_size_${idx}`).value;
+        item.qty = document.getElementById(`edit_ps_qty_${idx}`).value;
+        item.price = document.getElementById(`edit_ps_price_${idx}`).value;
+      });
+      alert("Changes Saved Successfully!");
+      closeEditModal();
+    }
+
+    function saveAllSizeEdit() {
+      allSizePrintingData.forEach((item, idx) => {
+        item.size = document.getElementById(`edit_as_size_${idx}`).value;
+        item.price = document.getElementById(`edit_as_price_${idx}`).value;
+      });
+      alert("Changes Saved Successfully!");
+      closeEditModal();
+    }
+
+    function saveInkjetEdit() {
+      inkjetPrintingData.forEach((item, idx) => {
+        item.size = document.getElementById(`edit_ij_size_${idx}`).value;
+        item.price = document.getElementById(`edit_ij_price_${idx}`).value;
+      });
+      alert("Changes Saved Successfully!");
+      closeEditModal();
+    }
+
+    function savePhotobookEdit() {
+      photobookPrintingData.forEach((item, idx) => {
+        item.finish = document.getElementById(`edit_pb_finish_${idx}`).value;
+        item.rate = document.getElementById(`edit_pb_rate_${idx}`).value;
+      });
+      alert("Changes Saved Successfully!");
+      closeEditModal();
+    }
+
+    function saveCupEdit() {
+      cupPrintingPrice = document.getElementById('edit_cup_price').value;
+      alert("Changes Saved Successfully!");
+      closeEditModal();
+    }
+
+    function saveGenericEdit(serviceName) {
+      let val = document.getElementById('edit_generic_price').value;
+      genericServicesPriceData[serviceName] = val;
+      alert("Changes Saved Successfully!");
+      closeEditModal();
+    }
+
+    /* --- ADMIN ADD SERVICE FUNCTIONALITY --- */
+
+    function openAdminAddServiceModal() {
+      const modal = document.getElementById('adminAddServiceModalOverlay');
+      const content = document.getElementById('adminAddServiceModalContent');
+
+      content.innerHTML = `
+        <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeAdminAddServiceModal()"></i>
+        <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 6px;">Add New Service</h3>
+        <p style="font-size: 12px; color: #666; margin-bottom: 16px;">Division, Service Name aur Packages define karein.</p>
+
+        <div class="edit-field-group">
+          <label>Select Division</label>
+          <select id="admin_select_division">
+            <option value="Photoshot">Photoshot</option>
+            <option value="Sale Division">Sale Division</option>
+            <option value="Photoframe Division">Photoframe Division</option>
+            <option value="Photo printing Division">Photo printing Division</option>
+            <option value="Videoshot Division">Videoshot Division</option>
+          </select>
+        </div>
+
+        <div class="edit-field-group">
+          <label>Name of Service</label>
+          <input type="text" id="admin_service_name" placeholder="e.g. Pre-Wedding Shoot">
+        </div>
+
+        <div class="edit-field-group">
+          <label>How many Packages / Variants?</label>
+          <input type="number" id="admin_package_count" min="1" max="20" placeholder="e.g. 10">
+        </div>
+
+        <button class="btn-main" onclick="generatePackageInputFields()" style="margin-bottom:15px; background:#333;">Generate Package Fields</button>
+
+        <div id="admin_packages_container"></div>
+
+        <button class="btn-main" id="saveNewServiceBtn" onclick="saveNewAdminService()" style="display:none; background:#2e7d32;">Save Service</button>
+      `;
+
+      modal.style.display = 'flex';
+      lucide.createIcons();
+    }
+
+    function closeAdminAddServiceModal() {
+      document.getElementById('adminAddServiceModalOverlay').style.display = 'none';
+    }
+
+    function generatePackageInputFields() {
+      const count = parseInt(document.getElementById('admin_package_count').value) || 0;
+      const container = document.getElementById('admin_packages_container');
+      const saveBtn = document.getElementById('saveNewServiceBtn');
+
+      if (count <= 0) {
+        alert("Kripya valid packages count dalein!");
+        return;
+      }
+
+      let html = `<div style="max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">`;
+
+      for (let i = 0; i < count; i++) {
+        html += `
+          <div class="edit-item-row">
+            <div style="font-size: 12px; font-weight: 800; color:#111; margin-bottom:6px;">Package #${i + 1}</div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px;">
+              <div class="edit-field-group" style="margin:0;">
+                <label>Sizes</label>
+                <input type="text" id="add_size_${i}" placeholder="e.g. 4x6">
+              </div>
+              <div class="edit-field-group" style="margin:0;">
+                <label>Quantity</label>
+                <input type="text" id="add_qty_${i}" placeholder="e.g. 1 pcs">
+              </div>
+              <div class="edit-field-group" style="margin:0;">
+                <label>Prices</label>
+                <input type="text" id="add_price_${i}" placeholder="e.g. ₹500">
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      html += `</div>`;
+      container.innerHTML = html;
+      saveBtn.style.display = 'flex';
+    }
+
+    function saveNewAdminService() {
+      const division = document.getElementById('admin_select_division').value;
+      const serviceName = document.getElementById('admin_service_name').value.trim();
+      const count = parseInt(document.getElementById('admin_package_count').value) || 0;
+
+      if (!serviceName) {
+        alert("Kripya Service Ka Naam Dalein!");
+        return;
+      }
+
+      let packagesList = [];
+      for (let i = 0; i < count; i++) {
+        let s = document.getElementById(`add_size_${i}`).value || 'Standard';
+        let q = document.getElementById(`add_qty_${i}`).value || '1 pcs';
+        let p = document.getElementById(`add_price_${i}`).value || '₹0.00';
+        packagesList.push({ size: s, qty: q, price: p });
+      }
+
+      // Store in memory
+      photoShotServiceData[serviceName] = packagesList;
+
+      // Dynamically add card to targeted division grid
+      const grid = document.getElementById(`grid-${division}`);
+      if (grid) {
+        const card = document.createElement('div');
+        card.className = 'service-card';
+        card.onclick = function() {
+          handleServiceClick(serviceName, () => generatePhotoShotModal(serviceName, photoShotServiceData[serviceName], 0));
+        };
+
+        card.innerHTML = `
+          <div>
+            <div class="service-icon-wrapper"><i data-lucide="package" size="18"></i></div>
+            <div class="service-name">${serviceName}</div>
+            <div class="service-desc">${packagesList.length} package options available.</div>
+          </div>
+          <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
+        `;
+        grid.appendChild(card);
+        lucide.createIcons();
+      }
+
+      alert(`"${serviceName}" Service successfully add ho gayi hai!`);
+      closeAdminAddServiceModal();
+    }
+
+    function filterServices() {
+      let input = document.getElementById('searchInput').value.toLowerCase();
+      let cards = document.getElementsByClassName('service-card');
+      
+      for (let card of cards) {
+        let name = card.querySelector('.service-name').innerText.toLowerCase();
+        let desc = card.querySelector('.service-desc').innerText.toLowerCase();
+        if (name.includes(input) || desc.includes(input)) {
+          card.style.display = "flex";
+        } else {
+          card.style.display = "none";
+        }
+      }
+    }
+
+    function sendWhatsAppOrder(serviceName, divisionName) {
+      let customPriceInfo = genericServicesPriceData[serviceName] ? `%0A*Price:* ${genericServicesPriceData[serviceName]}` : '';
+      let message = `Hello Yaaden Studio,%0A%0AI want to book/order the following service:%0A*Division:* ${divisionName}%0A*Service:* ${serviceName}${customPriceInfo}%0A%0APlease let me know the details!`;
+      let url = `https://wa.me/91${targetWhatsAppNumber}?text=${message}`;
+      
+      cart.push({ title: serviceName, details: genericServicesPriceData[serviceName] || divisionName });
+      updateCartBadges();
+      window.open(url, '_blank');
+    }
+
+    function closeModals() {
+      document.getElementById('cartModalOverlay').style.display = 'none';
+      document.getElementById('customPrintModalOverlay').style.display = 'none';
+    }
+
+    function updateCartBadges() {
+      let count = cart.length;
+      document.getElementById('topCartBadge').innerText = count;
+      document.getElementById('bottomCartBadge').innerText = count;
+    }
+
+    function openCartModal() {
+      closeModals();
+      document.getElementById('cartModalOverlay').style.display = 'flex';
+      renderCartUI();
+    }
+
+    function renderCartUI() {
+      const container = document.getElementById('cartItemsList');
+      const footer = document.getElementById('cartFooterSection');
+      container.innerHTML = '';
+
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div class="empty-cart-view">
+            <i data-lucide="shopping-bag" size="48" color="#ccc" style="margin-bottom: 8px;"></i>
+            <p style="font-weight: 600;">Your cart is empty!</p>
+            <p style="font-size: 12px; margin-top: 4px;">Tap on any service to order via WhatsApp.</p>
+          </div>
+        `;
+        footer.style.display = 'none';
+        lucide.createIcons();
+        return;
+      }
+
+      footer.style.display = 'block';
+
+      cart.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'cart-item-card';
+
+        div.innerHTML = `
+          <div class="cart-item-details">
+            <span class="cart-item-title">${item.title}</span>
+            <span class="cart-item-sub">${item.details}</span>
+          </div>
+          <button class="delete-item-btn" onclick="removeFromCart(${index})">
+            <i data-lucide="trash-2" size="16"></i>
+          </button>
+        `;
+        container.appendChild(div);
+      });
+      lucide.createIcons();
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCartBadges();
+      renderCartUI();
+    }
+
+    function sendFullCartToWhatsApp() {
+      if (cart.length === 0) return;
+
+      let text = `Hello Yaaden Studio!%0A%0A*Selected Services Inquiry:*%0A-------------------------------%0A`;
+      cart.forEach((item, idx) => {
+        text += `*${idx + 1}. ${item.title}* (${item.details})%0A`;
+      });
+      text += `-------------------------------%0APlease process these requests.`;
+
+      window.open(`https://wa.me/91${targetWhatsAppNumber}?text=${text}`, '_blank');
+    }
+
+    function addNewReview() {
+      let name = document.getElementById('revName').value;
+      let comment = document.getElementById('revComment').value;
+
+      if (!name || !comment) {
+        alert('Please enter both name and review comment!');
+        return;
+      }
+
+      let container = document.getElementById('reviewsContainer');
+      let div = document.createElement('div');
+      div.className = 'review-card';
+      div.innerHTML = `
+        <div class="review-header"><span class="reviewer-name">${name}</span><span class="stars">★★★★★</span></div>
+        <div class="review-comment">${comment}</div>
+      `;
+
+      container.prepend(div);
+      document.getElementById('revName').value = '';
+      document.getElementById('revComment').value = '';
+      alert('Thank you! Your review has been added.');
+    }
+
+    /* OUTDOOR PHOTOGRAPHY MODAL (WITHOUT EDIT OPTION & WITHOUT UPLOAD) */
+    function openOutdoorPhotographyModal() {
+      const modal = document.getElementById('customPrintModalOverlay');
+      const content = document.getElementById('customPrintModalContent');
+
+      content.innerHTML = `
+        <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeModals()"></i>
+        <h3 style="font-size: 22px; font-weight: 800; margin-bottom: 20px;">Outdoor Photography</h3>
+
+        <div class="print-panel-body">
+          <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 18px; padding: 20px; margin-bottom: 20px; text-align: center;">
+            <div style="width: 50px; height: 50px; border-radius: 50%; background: #111; color: #fff; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px auto;">
+              <i data-lucide="sun" size="24"></i>
+            </div>
+            <div style="font-size: 16px; font-weight: 800; color: #111;">Outdoor Session Details</div>
+            <div style="font-size: 13px; color: #666; margin-top: 4px;">Natural location portraitures & shoot</div>
+          </div>
+
+          <div style="background: #ffffff; border: 1px solid #eeeeee; padding: 16px; border-radius: 14px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 13px; color: #777;">Shoot Duration:</span>
+              <strong style="font-size: 14px; color: #111;">12 Hours</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 13px; color: #777;">Total Cost:</span>
+              <strong style="font-size: 18px; font-weight: 800; color: #2e7d32;">₹3,500.00</strong>
+            </div>
+          </div>
+
+          <button class="btn-main" style="background: #25D366; padding: 16px; font-size: 16px;" onclick="submitOutdoorEnquiry()">
+            <i data-lucide="message-square" size="20"></i> Book via WhatsApp
+          </button>
+        </div>
+      `;
+      modal.style.display = 'flex';
+      lucide.createIcons();
+    }
+
+    function submitOutdoorEnquiry() {
+      let msg = `Hello Yaaden Studio,%0A%0A*Division:* Photo shot Division%0A*Service:* Outdoor Photography%0A*Duration:* 12 Hours%0A*Cost:* ₹3,500.00%0A%0AI want to book this session. Please let me know the available dates!`;
+      
+      cart.push({ title: 'Outdoor Photography (12 Hours)', details: '₹3,500.00' });
+      updateCartBadges();
+      window.open(`https://wa.me/91${targetWhatsAppNumber}?text=${msg}`, '_blank');
+    }
+
+    /* REAL USER PHOTO SELECTION & UPLOAD TO IMGBB API */
+    function triggerPhotoUpload(previewImgId) {
+      activePreviewImgId = previewImgId;
+      document.getElementById('globalImageFileInput').click();
+    }
+
+    async function handleUserFileUploaded(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const localUrl = URL.createObjectURL(file);
+      const previewEl = document.getElementById(activePreviewImgId);
+      if (previewEl) {
+        previewEl.src = localUrl;
+      }
+
+      isUploading = true;
+      toggleWhatsAppButtons(false, "Uploading photo link...");
+
+      const formData = new FormData();
+      formData.append("image", file);
+
+      try {
+        const response = await fetch(`https://api.imgbb.com/1/upload?key=${imgbbApiKey}`, {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          userSelectedPhotoUrl = data.data.url;
+          isUploading = false;
+          toggleWhatsAppButtons(true, "Send Order to WhatsApp");
+          alert("Photo link successfully ready ho gaya hai!");
+        } else {
+          throw new Error("Upload failed");
+        }
+      } catch (error) {
+        console.error("Upload error:", error);
+        isUploading = false;
+        toggleWhatsAppButtons(true, "Send Order to WhatsApp");
+        alert("Photo upload karne mein dikkat aayi. Kripya dobara try karein.");
+      }
+    }
+
+    function toggleWhatsAppButtons(enable, text) {
+      const btns = document.querySelectorAll('.btn-main');
+      btns.forEach(btn => {
+        if (!enable) {
+          btn.style.opacity = "0.6";
+          btn.style.pointerEvents = "none";
+          btn.innerHTML = `<i data-lucide="loader" class="spin" size="20"></i> ${text}`;
+        } else {
+          btn.style.opacity = "1";
+          btn.style.pointerEvents = "auto";
+          btn.innerHTML = `<i data-lucide="message-square" size="20"></i> ${text}`;
+        }
+      });
+      lucide.createIcons();
+    }
+
+    function buildWhatsAppPhotoMessage(serviceTitle, extraDetails, divisionName = "Photo shot Division") {
+      let msg = `Hello Yaaden Studio,%0A%0A*Division:* ${divisionName}%0A*Service:* ${serviceTitle}%0A${extraDetails}%0A%0A`;
+      
+      if (userSelectedPhotoUrl && userSelectedPhotoUrl.startsWith('http')) {
+        msg += `*Uploaded Photo Link:*%0A${encodeURIComponent(userSelectedPhotoUrl)}%0A`;
+      } else {
+        msg += `*[Photo Attached]:* Photo select kar li hai, ise chat me alag se bhej raha hu.%0A`;
+      }
+      
+      msg += `%0APlease process my order!`;
+      return msg;
+    }
+
+    /* DYNAMIC MODALS FOR PHOTO SHOT DIVISION */
+    
+    let activePSSize = '';
+    let activePSQty = '';
+    let activePSPrice = '';
+
+    function generatePhotoShotModal(title, options, defaultIndex = 0) {
+      const modal = document.getElementById('customPrintModalOverlay');
+      const content = document.getElementById('customPrintModalContent');
+      let currentPreview = userSelectedPhotoUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80';
+
+      activePSSize = options[defaultIndex].size;
+      activePSQty = options[defaultIndex].qty;
+      activePSPrice = options[defaultIndex].price;
+
+      let chipsHTML = options.map((opt, idx) => `
+        <div class="size-chip ${idx === defaultIndex ? 'active' : ''}" onclick="selectPSOption('${title}', '${opt.size}', '${opt.qty}', '${opt.price}', this)">
+          ${opt.size}<br><span style="font-size:11px; color:#555;">${opt.qty}</span><br><strong style="font-size:11px; color:#2e7d32;">${opt.price}</strong>
+        </div>
+      `).join('');
+
+      content.innerHTML = `
+        <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeModals()"></i>
+        <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 16px;">${title}</h3>
+
+        <div class="print-panel-body">
+          <div class="upload-box" onclick="triggerPhotoUpload('psPreviewImg')">
+            <i data-lucide="upload-cloud" size="32" color="#111" style="margin-bottom: 6px;"></i>
+            <div style="font-weight: 800; font-size: 14px;">Select / Upload Photo</div>
+            <div style="font-size: 12px; color: #666;">Tap to choose photo from device</div>
+          </div>
+
+          <div class="preview-large-panel">
+            <img id="psPreviewImg" src="${currentPreview}" alt="Photo Preview">
+          </div>
+
+          <div style="font-size: 14px; font-weight: 800; margin-bottom: 10px;">Select Package / Size:</div>
+          <div class="size-chips-grid" id="psChipsGrid">
+            ${chipsHTML}
+          </div>
+
+          <div style="background: #f8f9fa; padding: 14px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div>
+              <div style="font-size: 12px; color: #777;">Selected: <strong id="lblPSSize" style="color:#111;">${activePSSize}</strong> (${activePSQty})</div>
+              <div style="font-size: 18px; font-weight: 800; color: #2e7d32;" id="lblPSPrice">${activePSPrice}</div>
+            </div>
+          </div>
+
+          <button class="btn-main" style="background: #25D366; padding: 16px; font-size: 16px;" onclick="submitPhotoShotEnquiry('${title}')">
+            <i data-lucide="message-square" size="20"></i> Send Order to WhatsApp
+          </button>
+        </div>
+      `;
+
+      modal.style.display = 'flex';
+      lucide.createIcons();
+    }
+
+    function selectPSOption(title, size, qty, price, el) {
+      activePSSize = size;
+      activePSQty = qty;
+      activePSPrice = price;
+
+      document.querySelectorAll('#psChipsGrid .size-chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+
+      document.getElementById('lblPSSize').innerText = size;
+      document.getElementById('lblPSPrice').innerText = price;
+    }
+
+    function submitPhotoShotEnquiry(title) {
+      let details = `*Package Size:* ${activePSSize}%0A*Quantity:* ${activePSQty}%0A*Price:* ${activePSPrice}`;
+      let msg = buildWhatsAppPhotoMessage(title, details, "Photo shot Division");
+      
+      cart.push({ title: `${title} (${activePSSize})`, details: `${activePSQty} - ${activePSPrice}` });
+      updateCartBadges();
+
+      window.open(`https://wa.me/91${targetWhatsAppNumber}?text=${msg}`, '_blank');
+    }
+
+    function openPhotoShotModal(title) {
+      generatePhotoShotModal(title, photoShotServiceData['Photo shot'], 0);
+    }
+
+    function openPhotoSessionModal(title) {
+      generatePhotoShotModal(title, photoShotServiceData['Photo session'], 0);
+    }
+
+    function openKidsPhotoModal(title) {
+      generatePhotoShotModal(title, photoShotServiceData['Kids photography'], 0);
+    }
+
+    function openMarriagePhotoModal(title) {
+      generatePhotoShotModal(title, photoShotServiceData['Marriages purpose Photography'], 0);
+    }
+
+    function openStudentPassportModal(title) {
+      generatePhotoShotModal(title, photoShotServiceData['Student passbook photo'], 0);
+    }
+
+    /* PRINTING DIVISION MODALS */
+
+    function openAllSizePrintingModal(customTitle = "All size photo printing") {
+      const modal = document.getElementById('customPrintModalOverlay');
+      const content = document.getElementById('customPrintModalContent');
+      let currentPreview = userSelectedPhotoUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80';
+
+      let chipsHTML = allSizePrintingData.map((opt, idx) => `
+        <div class="size-chip ${idx === 2 ? 'active' : ''}" onclick="selectAllSize('${opt.size}', '${opt.price}', ${opt.scale || 1.0}, this)">
+          ${opt.size}<br><span style="font-size:11px; color:#555;">${opt.price}</span>
+        </div>
+      `).join('');
+
+      content.innerHTML = `
+        <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeModals()"></i>
+        <h3 style="font-size: 22px; font-weight: 800; margin-bottom: 20px;">${customTitle}</h3>
+        
+        <div class="print-panel-body">
+          <div class="upload-box" onclick="triggerPhotoUpload('allSizePreviewImg')">
+            <i data-lucide="upload-cloud" size="36" color="#111" style="margin-bottom: 8px;"></i>
+            <div style="font-weight: 800; font-size: 15px;">Select Your Photo</div>
+            <div style="font-size: 13px; color: #666;">Tap here to choose photo from device</div>
+          </div>
+
+          <div class="preview-large-panel" id="allSizeContainer">
+            <img id="allSizePreviewImg" src="${currentPreview}" style="transform: scale(1);" alt="Preview">
+          </div>
+
+          <div style="font-size: 15px; font-weight: 800; margin-bottom: 12px;">Select Size & Price:</div>
+          <div class="size-chips-grid" id="allSizeChips">
+            ${chipsHTML}
+          </div>
+
+          <div style="background: #f8f9fa; padding: 16px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div>
+              <div style="font-size: 12px; color: #777;">Selected Size: <strong id="lblAllSize" style="color:#111; font-size:14px;">4×6</strong></div>
+              <div style="font-size: 18px; font-weight: 800; color: #2e7d32;" id="lblAllPrice">${allSizePrintingData[2].price}</div>
+            </div>
+          </div>
+
+          <button class="btn-main" style="background: #25D366; padding: 16px; font-size: 16px;" onclick="submitAllSizeEnquiry('${customTitle}')">
+            <i data-lucide="message-square" size="20"></i> Send Order to WhatsApp
+          </button>
+        </div>
+      `;
+      modal.style.display = 'flex';
+      lucide.createIcons();
+    }
+
+    let currentSelectedAllSize = '4×6';
+    let currentSelectedAllPrice = '₹15.00';
+
+    function selectAllSize(size, price, scaleFactor, el) {
+      currentSelectedAllSize = size;
+      currentSelectedAllPrice = price;
+      
+      document.querySelectorAll('#allSizeChips .size-chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+
+      document.getElementById('lblAllSize').innerText = size;
+      document.getElementById('lblAllPrice').innerText = price;
+
+      const img = document.getElementById('allSizePreviewImg');
+      if(img) img.style.transform = `scale(${scaleFactor})`;
+    }
+
+    function submitAllSizeEnquiry(title = "All size photo printing") {
+      let details = `*Selected Size:* ${currentSelectedAllSize}%0A*Price:* ${currentSelectedAllPrice}`;
+      let msg = buildWhatsAppPhotoMessage(title, details, "Photo printing Division");
+      window.open(`https://wa.me/91${targetWhatsAppNumber}?text=${msg}`, '_blank');
+    }
+
+    function openInkjetPrintingModal() {
+      const modal = document.getElementById('customPrintModalOverlay');
+      const content = document.getElementById('customPrintModalContent');
+      let currentPreview = userSelectedPhotoUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80';
+
+      let chipsHTML = inkjetPrintingData.map((opt, idx) => `
+        <div class="size-chip ${idx === 1 ? 'active' : ''}" onclick="selectInkjetSize('${opt.size}', ${opt.price}, this)">
+          ${opt.size}<br><span style="font-size:11px; color:#555;">₹${opt.price}</span>
+        </div>
+      `).join('');
+
+      chipsHTML += `
+        <div class="size-chip" onclick="selectInkjetSize('Custom (>24x36)', 0, this)">
+          Custom Size<br><span style="font-size:11px; color:#555;">₹2.50/sq.ft</span>
+        </div>
+      `;
+
+      content.innerHTML = `
+        <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeModals()"></i>
+        <h3 style="font-size: 22px; font-weight: 800; margin-bottom: 20px;">Ink Jet Printing</h3>
+
+        <div class="print-panel-body">
+          <div class="upload-box" onclick="triggerPhotoUpload('inkjetPreviewImg')">
+            <i data-lucide="upload-cloud" size="36" color="#111" style="margin-bottom: 8px;"></i>
+            <div style="font-weight: 800; font-size: 15px;">Select Your Photo</div>
+            <div style="font-size: 13px; color: #666;">Tap here to choose photo from device</div>
+          </div>
+
+          <div class="preview-large-panel">
+            <img id="inkjetPreviewImg" src="${currentPreview}" alt="Preview">
+          </div>
+
+          <div style="font-size: 15px; font-weight: 800; margin-bottom: 12px;">Select Size & Prices:</div>
+          <div class="size-chips-grid" id="inkjetChips">
+            ${chipsHTML}
+          </div>
+
+          <div id="customSizeInputBox" style="display: none; margin-bottom: 20px;">
+            <div style="font-size: 13px; font-weight: 700; margin-bottom: 6px;">Enter Custom Dimensions (in inches):</div>
+            <div style="display: flex; gap: 10px;">
+              <input type="number" id="customWidth" placeholder="Width (inches)" oninput="calculateCustomInkjet()" style="flex:1; padding: 12px; border:1px solid #ddd; border-radius:12px; font-size:14px;" />
+              <input type="number" id="customHeight" placeholder="Height (inches)" oninput="calculateCustomInkjet()" style="flex:1; padding: 12px; border:1px solid #ddd; border-radius:12px; font-size:14px;" />
+            </div>
+          </div>
+
+          <div style="background: #f8f9fa; padding: 16px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div>
+              <div style="font-size: 12px; color: #777;">Selected Size: <strong id="lblInkjetSize" style="color:#111; font-size:14px;">12×18</strong></div>
+              <div style="font-size: 18px; font-weight: 800; color: #2e7d32;" id="lblInkjetPrice">₹450.00</div>
+            </div>
+          </div>
+
+          <button class="btn-main" style="background: #25D366; padding: 16px; font-size: 16px;" onclick="submitInkjetEnquiry()">
+            <i data-lucide="message-square" size="20"></i> Send Order to WhatsApp
+          </button>
+        </div>
+      `;
+      modal.style.display = 'flex';
+      lucide.createIcons();
+    }
+
+    let currentInkjetSize = '12×18';
+    let currentInkjetPrice = '₹450.00';
+
+    function selectInkjetSize(size, price, el) {
+      currentInkjetSize = size;
+      document.querySelectorAll('#inkjetChips .size-chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+
+      const customBox = document.getElementById('customSizeInputBox');
+      if (size.includes('Custom')) {
+        customBox.style.display = 'block';
+        calculateCustomInkjet();
+      } else {
+        customBox.style.display = 'none';
+        currentInkjetPrice = `₹${price}.00`;
+        document.getElementById('lblInkjetSize').innerText = size;
+        document.getElementById('lblInkjetPrice').innerText = currentInkjetPrice;
+      }
+    }
+
+    function calculateCustomInkjet() {
+      let w = parseFloat(document.getElementById('customWidth').value) || 0;
+      let h = parseFloat(document.getElementById('customHeight').value) || 0;
+      let sqFt = (w * h) / 144;
+      let total = sqFt * 2.50;
+      currentInkjetSize = `Custom (${w}×${h} inches)`;
+      currentInkjetPrice = `₹${total.toFixed(2)}`;
+      document.getElementById('lblInkjetSize').innerText = currentInkjetSize;
+      document.getElementById('lblInkjetPrice').innerText = currentInkjetPrice;
+    }
+
+    function submitInkjetEnquiry() {
+      let details = `*Selected Size:* ${currentInkjetSize}%0A*Calculated Price:* ${currentInkjetPrice}`;
+      let msg = buildWhatsAppPhotoMessage("Ink jet printing", details, "Photo printing Division");
+      window.open(`https://wa.me/91${targetWhatsAppNumber}?text=${msg}`, '_blank');
+    }
+
+    function openCupPrintingModal() {
+      const modal = document.getElementById('customPrintModalOverlay');
+      const content = document.getElementById('customPrintModalContent');
+      let currentPreview = userSelectedPhotoUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80';
+
+      content.innerHTML = `
+        <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeModals()"></i>
+        <h3 style="font-size: 22px; font-weight: 800; margin-bottom: 20px;">Cup Printing</h3>
+
+        <div class="print-panel-body">
+          <div class="upload-box" onclick="triggerPhotoUpload('cupPreviewImg')">
+            <i data-lucide="upload-cloud" size="36" color="#111" style="margin-bottom: 8px;"></i>
+            <div style="font-weight: 800; font-size: 15px;">Select Your Photo</div>
+            <div style="font-size: 13px; color: #666;">Tap here to choose photo from device</div>
+          </div>
+
+          <div class="preview-large-panel">
+            <img id="cupPreviewImg" src="${currentPreview}" alt="Cup Print Photo Preview">
+          </div>
+
+          <div style="background: #f8f9fa; padding: 16px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div>
+              <div style="font-size: 12px; color: #777;">Item: <strong style="color:#111;">Personalized Coffee Mug</strong></div>
+              <div style="font-size: 18px; font-weight: 800; color: #2e7d32;">${cupPrintingPrice}</div>
+            </div>
+          </div>
+
+          <button class="btn-main" style="background: #25D366; padding: 16px; font-size: 16px;" onclick="submitCupEnquiry()">
+            <i data-lucide="message-square" size="20"></i> Send Order to WhatsApp
+          </button>
+        </div>
+      `;
+      modal.style.display = 'flex';
+      lucide.createIcons();
+    }
+
+    function submitCupEnquiry() {
+      let details = `*Price:* ${cupPrintingPrice}`;
+      let msg = buildWhatsAppPhotoMessage("Cup printing", details, "Photo printing Division");
+      window.open(`https://wa.me/91${targetWhatsAppNumber}?text=${msg}`, '_blank');
+    }
+
+    function openPhotobookModal() {
+      const modal = document.getElementById('customPrintModalOverlay');
+      const content = document.getElementById('customPrintModalContent');
+      let currentPreview = userSelectedPhotoUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80';
+
+      let chipsHTML = photobookPrintingData.map((opt, idx) => `
+        <div class="size-chip ${idx === 0 ? 'active' : ''}" onclick="selectPhotobookFinish('${opt.finish}', '${opt.rate}', this)">
+          ${opt.finish}<br><span style="font-size:11px; color:#555;">${opt.rate}</span>
+        </div>
+      `).join('');
+
+      content.innerHTML = `
+        <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeModals()"></i>
+        <h3 style="font-size: 22px; font-weight: 800; margin-bottom: 20px;">Photobook Printing</h3>
+
+        <div class="print-panel-body">
+          <div class="upload-box" onclick="triggerPhotoUpload('photobookPreviewImg')">
+            <i data-lucide="upload-cloud" size="36" color="#111" style="margin-bottom: 8px;"></i>
+            <div style="font-weight: 800; font-size: 15px;">Select Your Photo</div>
+            <div style="font-size: 13px; color: #666;">Tap here to choose photo from device</div>
+          </div>
+
+          <div class="preview-large-panel">
+            <img id="photobookPreviewImg" src="${currentPreview}" alt="Preview">
+          </div>
+
+          <div style="font-size: 15px; font-weight: 800; margin-bottom: 12px;">Select Finish Type & Rates:</div>
+          <div class="size-chips-grid" id="photobookChips">
+            ${chipsHTML}
+          </div>
+
+          <div style="background: #f8f9fa; padding: 16px; border-radius: 14px; margin-bottom: 20px; font-size: 13px; color: #555;">
+            <div>Maximum Size: <strong>12 × 18 inches</strong></div>
+            <div>Selected Finish Rate: <strong id="lblPhotobookRate" style="color:#2e7d32;">${photobookPrintingData[0].rate}</strong></div>
+          </div>
+
+          <button class="btn-main" style="background: #25D366; padding: 16px; font-size: 16px;" onclick="submitPhotobookEnquiry()">
+            <i data-lucide="message-square" size="20"></i> Send Order to WhatsApp
+          </button>
+        </div>
+      `;
+      modal.style.display = 'flex';
+      lucide.createIcons();
+    }
+
+    let currentPhotobookFinish = 'NTR';
+    let currentPhotobookRate = '₹130 per sq. ft';
+
+    function selectPhotobookFinish(finish, rate, el) {
+      currentPhotobookFinish = finish;
+      currentPhotobookRate = rate;
+      document.querySelectorAll('#photobookChips .size-chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('lblPhotobookRate').innerText = rate;
+    }
+
+    function submitPhotobookEnquiry() {
+      let details = `*Finish Type:* ${currentPhotobookFinish}%0A*Rate:* ${currentPhotobookRate}`;
+      let msg = buildWhatsAppPhotoMessage("Photobook printing", details, "Photo printing Division");
+      window.open(`https://wa.me/91${targetWhatsAppNumber}?text=${msg}`, '_blank');
+    }
+
+    // Initialize News UI on page load
+    renderNewsUI();
+  </script>
+</body>
+</html>
