@@ -10,6 +10,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Firebase Core & Realtime Database -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
   <style>
     :root {
@@ -21,6 +24,69 @@
       --border-radius: 20px;
       --shadow-sm: 0 4px 20px rgba(0, 0, 0, 0.03);
       --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.06);
+      --border-color: #eeeeee;
+      --icon-bg: #111111;
+      --icon-color: #ffffff;
+    }
+
+    /* THEME 1: CLASSIC LIGHT */
+    body.theme-light {
+      --bg-color: #f6f7f9;
+      --card-bg: #ffffff;
+      --text-main: #121212;
+      --text-muted: #757575;
+      --accent-color: #000000;
+      --border-color: #eeeeee;
+      --icon-bg: #111111;
+      --icon-color: #ffffff;
+    }
+
+    /* THEME 2: DARK SLATE GRAY */
+    body.theme-dark-slate {
+      --bg-color: #1a1e24;
+      --card-bg: #242933;
+      --text-main: #f0f2f5;
+      --text-muted: #a0a7b4;
+      --accent-color: #3b82f6;
+      --border-color: #2e3545;
+      --icon-bg: #3b82f6;
+      --icon-color: #ffffff;
+    }
+
+    /* THEME 3: WARM BEIGE & COFFEE */
+    body.theme-warm-coffee {
+      --bg-color: #f5efe6;
+      --card-bg: #fffbf7;
+      --text-main: #3c2a21;
+      --text-muted: #8c7a6b;
+      --accent-color: #634832;
+      --border-color: #e8dfd8;
+      --icon-bg: #634832;
+      --icon-color: #ffffff;
+    }
+
+    /* THEME 4: NEON CYBER */
+    body.theme-neon-cyber {
+      --bg-color: #0d0f17;
+      --card-bg: #161926;
+      --text-main: #e2e8f0;
+      --text-muted: #808a9d;
+      --accent-color: #00f2fe;
+      --border-color: #22273a;
+      --icon-bg: #00f2fe;
+      --icon-color: #000000;
+    }
+
+    /* THEME 5: ROYAL GOLD & CHARCOAL */
+    body.theme-royal-gold {
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --text-main: #f5f5f5;
+      --text-muted: #a0a0a0;
+      --accent-color: #d4af37;
+      --border-color: #333333;
+      --icon-bg: #d4af37;
+      --icon-color: #000000;
     }
 
     * {
@@ -39,6 +105,7 @@
       min-height: 100vh;
       padding: 0;
       overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     /* SPLASH SCREEN STYLES */
@@ -147,11 +214,12 @@
     .app-container {
       width: 100%;
       max-width: 430px;
-      background-color: #fafafa;
+      background-color: var(--bg-color);
       min-height: 100vh;
       padding: 20px 20px 110px 20px;
       position: relative;
       box-shadow: 0 0 50px rgba(0, 0, 0, 0.05);
+      transition: background-color 0.3s ease;
     }
 
     /* BRAND LOGO */
@@ -169,7 +237,7 @@
       height: 110px;
       border-radius: 50%;
       background: #ffffff;
-      border: 4px solid #111111;
+      border: 4px solid var(--accent-color);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -199,9 +267,7 @@
       font-size: 24px;
       font-weight: 800;
       letter-spacing: -0.5px;
-      background: linear-gradient(135deg, #111111 0%, #444444 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--text-main);
     }
 
     .header-icons {
@@ -215,13 +281,13 @@
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background: #ffffff;
-      border: 1px solid #eeeeee;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      color: #333;
+      color: var(--text-main);
     }
 
     .badge {
@@ -250,7 +316,7 @@
       align-items: center;
       gap: 12px;
       box-shadow: var(--shadow-sm);
-      border: 1px solid rgba(0, 0, 0, 0.03);
+      border: 1px solid var(--border-color);
       margin-bottom: 24px;
     }
 
@@ -264,26 +330,26 @@
       font-weight: 500;
     }
 
-    .search-box input::placeholder { color: #a0a0a0; }
-    .filter-btn { color: #666; cursor: pointer; }
+    .search-box input::placeholder { color: var(--text-muted); }
+    .filter-btn { color: var(--text-muted); cursor: pointer; }
 
     /* Promo Card */
     .promo-card {
-      background: linear-gradient(135deg, #eef9f2 0%, #e6f4ea 50%, #f0f7f4 100%);
+      background: linear-gradient(135deg, var(--card-bg) 0%, var(--bg-color) 100%);
       border-radius: 24px;
       padding: 24px;
       position: relative;
       overflow: hidden;
       margin-bottom: 28px;
       box-shadow: var(--shadow-sm);
-      border: 1px solid rgba(255, 255, 255, 0.8);
+      border: 1px solid var(--border-color);
     }
 
-    .promo-tag { color: #e65100; font-weight: 700; font-size: 18px; margin-bottom: 4px; }
+    .promo-tag { color: var(--accent-color); font-weight: 700; font-size: 18px; margin-bottom: 4px; }
     .promo-title { font-size: 14px; color: var(--text-muted); margin-bottom: 16px; font-weight: 500; }
     .promo-btn {
       background: var(--accent-color);
-      color: #ffffff;
+      color: var(--icon-color);
       border: none;
       padding: 10px 20px;
       border-radius: 30px;
@@ -305,7 +371,7 @@
     .section-header-title {
       font-size: 22px;
       font-weight: 900;
-      color: #111111;
+      color: var(--text-main);
       letter-spacing: 0.5px;
       margin-bottom: 6px;
       text-transform: uppercase;
@@ -314,19 +380,19 @@
     .section-header-underline {
       width: 50px;
       height: 4px;
-      background: #111111;
+      background: var(--accent-color);
       border-radius: 2px;
       margin-bottom: 20px;
     }
 
     /* Divisions */
     .division-master-block {
-      background: #ffffff;
+      background: var(--card-bg);
       border-radius: 24px;
       padding: 18px;
       margin-bottom: 24px;
       box-shadow: var(--shadow-md);
-      border: 1px solid rgba(0, 0, 0, 0.04);
+      border: 1px solid var(--border-color);
     }
 
     .division-header-title {
@@ -338,7 +404,7 @@
       align-items: center;
       gap: 10px;
       padding-bottom: 10px;
-      border-bottom: 2px solid #f2f2f2;
+      border-bottom: 2px solid var(--border-color);
     }
 
     .services-grid {
@@ -348,14 +414,14 @@
     }
 
     .service-card {
-      background: #fcfcfc;
+      background: var(--bg-color);
       border-radius: 16px;
       padding: 14px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-      border: 1px solid #eeeeee;
+      border: 1px solid var(--border-color);
       transition: transform 0.2s, box-shadow 0.2s;
       cursor: pointer;
       position: relative;
@@ -363,19 +429,19 @@
 
     .service-card:active {
       transform: scale(0.98);
-      background: #f4f4f4;
+      opacity: 0.9;
     }
 
     .service-icon-wrapper {
       width: 40px;
       height: 40px;
       border-radius: 12px;
-      background: #111111;
+      background: var(--icon-bg);
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 10px;
-      color: #ffffff;
+      color: var(--icon-color);
     }
 
     .service-name {
@@ -404,9 +470,9 @@
       width: 28px;
       height: 28px;
       border-radius: 50%;
-      background: #f1f1f1;
-      color: #111111;
-      border: none;
+      background: var(--card-bg);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -415,24 +481,24 @@
 
     /* YAADEN NEWS SECTION STYLES */
     .news-section-card {
-      background: #ffffff;
+      background: var(--card-bg);
       border-radius: 24px;
       padding: 20px;
       margin-bottom: 24px;
       box-shadow: var(--shadow-md);
-      border: 1px solid rgba(0, 0, 0, 0.04);
+      border: 1px solid var(--border-color);
     }
 
     .news-title-header {
       font-size: 18px;
       font-weight: 800;
-      color: #111;
+      color: var(--text-main);
       display: flex;
       align-items: center;
       gap: 10px;
       margin-bottom: 14px;
       padding-bottom: 8px;
-      border-bottom: 2px solid #f2f2f2;
+      border-bottom: 2px solid var(--border-color);
     }
 
     .news-slider-wrapper {
@@ -469,13 +535,13 @@
     .news-desc-box {
       font-size: 13px;
       line-height: 1.6;
-      color: #444;
+      color: var(--text-main);
       max-height: 250px;
       overflow-y: auto;
       padding: 12px;
-      background: #f9f9f9;
+      background: var(--bg-color);
       border-radius: 12px;
-      border: 1px solid #eee;
+      border: 1px solid var(--border-color);
       white-space: pre-wrap;
     }
 
@@ -499,8 +565,41 @@
       gap: 6px;
     }
 
-    .btn-news-add { background: #111; color: #fff; }
+    .btn-news-add { background: var(--accent-color); color: var(--icon-color); }
     .btn-news-remove { background: #ff3b30; color: #fff; }
+
+    /* GALLERY ADMIN ACTION STYLES */
+    .gallery-admin-actions {
+      display: none;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .gallery-item {
+      position: relative;
+    }
+
+    .gallery-item.selectable {
+      cursor: pointer;
+      border: 3px solid #ff3b30;
+    }
+
+    .gallery-item.selectable.selected::after {
+      content: '✓';
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: #ff3b30;
+      color: #fff;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 12px;
+    }
 
     /* Navigation */
     .bottom-nav-container {
@@ -514,7 +613,7 @@
     }
 
     .bottom-nav {
-      background: rgba(255, 255, 255, 0.9);
+      background: var(--card-bg);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-radius: 35px;
@@ -523,7 +622,7 @@
       justify-content: space-between;
       align-items: center;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-      border: 1px solid rgba(255, 255, 255, 0.5);
+      border: 1px solid var(--border-color);
     }
 
     .nav-item {
@@ -534,7 +633,7 @@
       border-radius: 25px;
       border: none;
       background: transparent;
-      color: #666;
+      color: var(--text-muted);
       font-weight: 600;
       font-size: 13px;
       cursor: pointer;
@@ -543,8 +642,8 @@
     }
 
     .nav-item.active {
-      background: #111111;
-      color: #ffffff;
+      background: var(--accent-color);
+      color: var(--icon-color);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
@@ -565,7 +664,8 @@
     }
 
     .modal-content {
-      background: #ffffff;
+      background: var(--card-bg);
+      color: var(--text-main);
       width: 100%;
       max-width: 580px;
       max-height: 96vh;
@@ -575,6 +675,7 @@
       box-shadow: 0 20px 50px rgba(0,0,0,0.3);
       position: relative;
       animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 1px solid var(--border-color);
     }
 
     @keyframes popIn {
@@ -587,8 +688,8 @@
       top: 22px;
       right: 22px;
       cursor: pointer;
-      color: #444;
-      background: #f0f0f0;
+      color: var(--text-main);
+      background: var(--bg-color);
       border-radius: 50%;
       padding: 6px;
     }
@@ -603,8 +704,8 @@
     }
 
     .cart-item-card {
-      background: #f8f9fa;
-      border: 1px solid #e9ecef;
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
       border-radius: 16px;
       padding: 14px;
       display: flex;
@@ -613,8 +714,8 @@
     }
 
     .cart-item-details { display: flex; flex-direction: column; gap: 3px; }
-    .cart-item-title { font-size: 14px; font-weight: 800; color: #111; }
-    .cart-item-sub { font-size: 12px; color: #666; }
+    .cart-item-title { font-size: 14px; font-weight: 800; color: var(--text-main); }
+    .cart-item-sub { font-size: 12px; color: var(--text-muted); }
 
     .delete-item-btn {
       background: #ffebee;
@@ -630,21 +731,21 @@
       margin-left: 10px;
     }
 
-    .empty-cart-view { text-align: center; padding: 30px 10px; color: #888; }
+    .empty-cart-view { text-align: center; padding: 30px 10px; color: var(--text-muted); }
 
     .info-card-block {
-      background: #ffffff;
+      background: var(--card-bg);
       border-radius: 20px;
       padding: 20px;
       margin-bottom: 24px;
       box-shadow: var(--shadow-sm);
-      border: 1px solid rgba(0,0,0,0.03);
+      border: 1px solid var(--border-color);
     }
 
     .info-card-title {
       font-size: 17px;
       font-weight: 800;
-      color: #111;
+      color: var(--text-main);
       margin-bottom: 12px;
       display: flex;
       align-items: center;
@@ -654,19 +755,19 @@
     .about-text {
       font-size: 13px;
       line-height: 1.6;
-      color: #555;
+      color: var(--text-muted);
       text-align: justify;
       margin-bottom: 12px;
     }
 
     .founder-box {
-      background: #f8f9fa;
-      border-left: 4px solid #111;
+      background: var(--bg-color);
+      border-left: 4px solid var(--accent-color);
       padding: 10px 14px;
       border-radius: 0 12px 12px 0;
       font-size: 13px;
       font-weight: 700;
-      color: #222;
+      color: var(--text-main);
       display: flex;
       align-items: center;
       gap: 8px;
@@ -678,7 +779,7 @@
       justify-content: space-between;
       font-size: 13px;
       padding: 8px 0;
-      border-bottom: 1px dashed #eee;
+      border-bottom: 1px dashed var(--border-color);
     }
     .timing-row:last-child { border-bottom: none; }
 
@@ -694,16 +795,16 @@
       align-items: center;
       gap: 8px;
       padding: 10px 12px;
-      background: #f8f9fa;
-      border: 1px solid #e9ecef;
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
       border-radius: 12px;
       text-decoration: none;
-      color: #333;
+      color: var(--text-main);
       font-size: 12px;
       font-weight: 700;
       transition: all 0.2s;
     }
-    .social-btn:hover { background: #111; color: #fff; }
+    .social-btn:hover { background: var(--accent-color); color: var(--icon-color); }
 
     .terms-list {
       list-style-type: none;
@@ -712,7 +813,7 @@
       flex-direction: column;
       gap: 8px;
       font-size: 12px;
-      color: #555;
+      color: var(--text-muted);
     }
 
     .terms-list li {
@@ -723,17 +824,18 @@
     }
 
     .make-order-card {
-      background: #000000;
-      color: #ffffff;
+      background: var(--card-bg);
+      color: var(--text-main);
       border-radius: 22px;
       padding: 22px;
       margin-bottom: 24px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.2);
       text-align: center;
+      border: 1px solid var(--border-color);
     }
 
     .make-order-title { font-size: 18px; font-weight: 800; margin-bottom: 6px; letter-spacing: 0.5px; }
-    .make-order-desc { font-size: 12px; color: #aaa; margin-bottom: 16px; }
+    .make-order-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
 
     .order-action-btns { display: flex; gap: 10px; }
 
@@ -751,7 +853,7 @@
       gap: 6px;
       text-decoration: none;
     }
-    .btn-call { background: #ffffff; color: #000000; }
+    .btn-call { background: var(--accent-color); color: var(--icon-color); }
     .btn-wa { background: #25D366; color: #ffffff; }
 
     .gallery-grid {
@@ -781,8 +883,8 @@
     }
 
     .review-card {
-      background: #f8f9fa;
-      border: 1px solid #eeeeee;
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
       border-radius: 14px;
       padding: 12px;
     }
@@ -794,13 +896,13 @@
       margin-bottom: 4px;
     }
 
-    .reviewer-name { font-size: 13px; font-weight: 700; color: #111; }
+    .reviewer-name { font-size: 13px; font-weight: 700; color: var(--text-main); }
     .stars { color: #ffb400; font-size: 12px; }
-    .review-comment { font-size: 12px; color: #555; }
+    .review-comment { font-size: 12px; color: var(--text-muted); }
 
     .add-review-box {
-      background: #fdfdfd;
-      border: 1px solid #e0e0e0;
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
       border-radius: 14px;
       padding: 12px;
     }
@@ -808,16 +910,18 @@
     .add-review-box input, .add-review-box textarea {
       width: 100%;
       padding: 8px 12px;
-      border: 1px solid #ddd;
+      border: 1px solid var(--border-color);
       border-radius: 8px;
       margin-bottom: 8px;
       font-size: 12px;
       outline: none;
+      background: var(--card-bg);
+      color: var(--text-main);
     }
 
     .btn-main {
       width: 100%;
-      background: #111111;
+      background: #25D366;
       color: #ffffff;
       border: none;
       padding: 14px;
@@ -832,27 +936,27 @@
     }
 
     .footer-branding { text-align: center; padding: 30px 10px 10px 10px; margin-top: 20px; }
-    .trust-tagline { font-size: 16px; font-weight: 900; color: #111111; letter-spacing: 1px; margin-bottom: 4px; }
-    .brand-subline { font-size: 12px; font-weight: 700; color: #777; }
+    .trust-tagline { font-size: 16px; font-weight: 900; color: var(--text-main); letter-spacing: 1px; margin-bottom: 4px; }
+    .brand-subline { font-size: 12px; font-weight: 700; color: var(--text-muted); }
 
     .print-panel-body { padding: 15px 0; }
     
     .upload-box {
-      border: 2px dashed #000;
+      border: 2px dashed var(--accent-color);
       border-radius: 18px;
       padding: 24px;
       text-align: center;
-      background: #f9f9f9;
+      background: var(--bg-color);
       cursor: pointer;
       margin-bottom: 20px;
       transition: background 0.2s;
     }
-    .upload-box:hover { background: #f0f0f0; }
+    .upload-box:hover { opacity: 0.9; }
 
     .preview-large-panel {
       width: 100%;
       height: 240px;
-      background: #eaeaea;
+      background: var(--bg-color);
       border-radius: 18px;
       display: flex;
       align-items: center;
@@ -860,7 +964,7 @@
       overflow: hidden;
       margin-bottom: 20px;
       position: relative;
-      border: 2px solid #ddd;
+      border: 2px solid var(--border-color);
     }
 
     .preview-large-panel img {
@@ -878,8 +982,8 @@
     }
 
     .size-chip {
-      background: #f2f2f2;
-      border: 1px solid #ddd;
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
       padding: 12px 6px;
       border-radius: 12px;
       text-align: center;
@@ -888,15 +992,16 @@
       cursor: pointer;
       transition: all 0.2s;
       line-height: 1.3;
+      color: var(--text-main);
     }
 
     .size-chip.active {
-      background: #111;
-      color: #fff;
-      border-color: #111;
+      background: var(--accent-color);
+      color: var(--icon-color);
+      border-color: var(--accent-color);
     }
     .size-chip.active span {
-      color: #fff !important;
+      color: var(--icon-color) !important;
     }
 
     /* EDIT MODAL EXTRA STYLES */
@@ -908,19 +1013,21 @@
       font-size: 12px;
       font-weight: 700;
       margin-bottom: 4px;
-      color: #333;
+      color: var(--text-main);
     }
     .edit-field-group input, .edit-field-group select, .edit-field-group textarea {
       width: 100%;
       padding: 10px 12px;
-      border: 1px solid #ccc;
+      border: 1px solid var(--border-color);
       border-radius: 10px;
       font-size: 14px;
       outline: none;
+      background: var(--bg-color);
+      color: var(--text-main);
     }
     .edit-item-row {
-      background: #f8f9fa;
-      border: 1px solid #e0e0e0;
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
       border-radius: 12px;
       padding: 10px;
       margin-bottom: 10px;
@@ -941,9 +1048,9 @@
       display: none; /* Only visible in Admin Edit Mode */
     }
     .btn-admin-add {
-      background: linear-gradient(135deg, #111111 0%, #333333 100%);
-      color: #ffffff;
-      border: 2px dashed #ffffff;
+      background: var(--accent-color);
+      color: var(--icon-color);
+      border: 2px dashed var(--border-color);
       padding: 16px;
       border-radius: 18px;
       font-weight: 800;
@@ -960,9 +1067,42 @@
     .btn-admin-add:active {
       transform: scale(0.98);
     }
+
+    /* THEME SELECTION BLOCK (ADMIN CONTROL) */
+    .theme-selection-block {
+      display: none;
+      background: var(--card-bg);
+      border: 2px dashed var(--accent-color);
+      border-radius: 20px;
+      padding: 20px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .theme-selection-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .theme-select-dropdown {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      font-size: 14px;
+      font-weight: 700;
+      background: var(--bg-color);
+      color: var(--text-main);
+      outline: none;
+      cursor: pointer;
+    }
   </style>
 </head>
-<body>
+<body class="theme-light">
 
   <!-- SPLASH ANIMATION SCREEN -->
   <div id="splashScreen">
@@ -1021,7 +1161,7 @@
     <!-- 1. Photo shot Division -->
     <div class="division-master-block" id="div-Photoshot">
       <div class="division-header-title">
-        <i data-lucide="camera" size="20" color="#111"></i> Photoshot
+        <i data-lucide="camera" size="20"></i> Photoshot
       </div>
       <div class="services-grid" id="grid-Photoshot">
         <div class="service-card" onclick="handleServiceClick('Photo shot', () => openPhotoShotModal('Photo shot'))">
@@ -1033,7 +1173,7 @@
           <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
         </div>
 
-        <div class="service-card" onclick="handleServiceClick('Photo session', () => openPhotoSessionModal('Photo session'))">
+        <div class="service-card" onclick="handleServiceClick('Photo session', () => openPhotoShotModal('Photo session'))">
           <div>
             <div class="service-icon-wrapper"><i data-lucide="camera" size="18"></i></div>
             <div class="service-name">Photo session</div>
@@ -1042,7 +1182,7 @@
           <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
         </div>
 
-        <div class="service-card" onclick="handleServiceClick('Kids photography', () => openKidsPhotoModal('Kids photography'))">
+        <div class="service-card" onclick="handleServiceClick('Kids photography', () => openPhotoShotModal('Kids photography'))">
           <div>
             <div class="service-icon-wrapper"><i data-lucide="smile" size="18"></i></div>
             <div class="service-name">Kids photography</div>
@@ -1051,7 +1191,7 @@
           <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
         </div>
 
-        <div class="service-card" onclick="handleServiceClick('Marriages purpose Photography', () => openMarriagePhotoModal('Marriages purpose Photography'))">
+        <div class="service-card" onclick="handleServiceClick('Marriages purpose Photography', () => openPhotoShotModal('Marriages purpose Photography'))">
           <div>
             <div class="service-icon-wrapper"><i data-lucide="heart" size="18"></i></div>
             <div class="service-name">Marriages purpose Photography</div>
@@ -1060,7 +1200,7 @@
           <div class="service-footer"><button class="add-btn"><i data-lucide="plus" size="14"></i></button></div>
         </div>
 
-        <div class="service-card" onclick="handleServiceClick('Student passbook photo', () => openStudentPassportModal('Student passbook photo'))">
+        <div class="service-card" onclick="handleServiceClick('Student passbook photo', () => openPhotoShotModal('Student passbook photo'))">
           <div>
             <div class="service-icon-wrapper"><i data-lucide="user-check" size="18"></i></div>
             <div class="service-name">Student passbook photo</div>
@@ -1083,7 +1223,7 @@
     <!-- 2. Videoshot Division -->
     <div class="division-master-block" id="div-Videoshot Division">
       <div class="division-header-title">
-        <i data-lucide="video" size="20" color="#111"></i> Videoshot Division
+        <i data-lucide="video" size="20"></i> Videoshot Division
       </div>
       <div class="services-grid" id="grid-Videoshot Division">
         <div class="service-card" onclick="handleServiceClick('Videography', () => sendWhatsAppOrder('Videography', 'Videoshot Division'))">
@@ -1118,10 +1258,10 @@
     <!-- 3. Photo printing Division -->
     <div class="division-master-block" id="div-Photo printing Division">
       <div class="division-header-title">
-        <i data-lucide="printer" size="20" color="#111"></i> Photo printing Division
+        <i data-lucide="printer" size="20"></i> Photo printing Division
       </div>
       <div class="services-grid" id="grid-Photo printing Division">
-        <div class="service-card" onclick="handleServiceClick('All size photo printing', () => openAllSizePrintingModal())">
+        <div class="service-card" onclick="handleServiceClick('All size photo printing', () => openAllSizePrintingModal('All size photo printing'))">
           <div>
             <div class="service-icon-wrapper"><i data-lucide="file-text" size="18"></i></div>
             <div class="service-name">All size photo printing</div>
@@ -1171,7 +1311,7 @@
     <!-- 4. Photoframe Division -->
     <div class="division-master-block" id="div-Photoframe Division">
       <div class="division-header-title">
-        <i data-lucide="square" size="20" color="#111"></i> Photoframe Division
+        <i data-lucide="square" size="20"></i> Photoframe Division
       </div>
       <div class="services-grid" id="grid-Photoframe Division">
         <div class="service-card" onclick="handleServiceClick('All size photo frame', () => sendWhatsAppOrder('All size photo frame', 'Photoframe Division'))">
@@ -1206,7 +1346,7 @@
     <!-- 5. Sale Division -->
     <div class="division-master-block" id="div-Sale Division">
       <div class="division-header-title">
-        <i data-lucide="shopping-bag" size="20" color="#111"></i> Sale Division
+        <i data-lucide="shopping-bag" size="20"></i> Sale Division
       </div>
       <div class="services-grid" id="grid-Sale Division">
         <div class="service-card" onclick="handleServiceClick('All Photographic Materials', () => sendWhatsAppOrder('All Photographic Materials', 'Sale Division'))">
@@ -1247,10 +1387,10 @@
       </div>
     </div>
 
-    <!-- YAADEN NEWS SECTION (AFTER SERVICES) -->
+    <!-- YAADEN NEWS SECTION -->
     <div class="news-section-card" id="yaadenNewsBlock">
       <div class="news-title-header">
-        <i data-lucide="newspaper" size="20" color="#111"></i> Yaaden News
+        <i data-lucide="newspaper" size="20"></i> Yaaden News
       </div>
       <div id="newsContentWrapper">
         <div class="news-slider-wrapper">
@@ -1291,20 +1431,20 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
     <!-- ABOUT US SECTION -->
     <div class="info-card-block">
       <div class="info-card-title">
-        <i data-lucide="info" size="20" color="#111"></i> About Us (Estd: 1998)
+        <i data-lucide="info" size="20"></i> About Us (Estd: 1998)
       </div>
       <p class="about-text">
         Welcome to <strong>Yaaden</strong> Studio! Hum aapse judi har haseen aur yaadgaar moments ko hamesha ke liye album, frames aur digital prints me kaid karne me mahir hain. Pichle kai saalon se hum high-quality canvas printing, premium wedding Karizma albums, personalized gift mugs, digital visiting cards aur modern photo frames ki best-in-class printing service provide kar rahe hain. Hamari lab latest German technology machinery aur original non-fading colors ka estemal karti hai taaki aapki photos hamesha nayi jaisi chamakti rahein.
       </p>
       <div class="founder-box">
-        <i data-lucide="award" size="18" color="#111"></i> Founder: B.N 'Singh. "Pappan"
+        <i data-lucide="award" size="18"></i> Founder: B.N 'Singh. "Pappan"
       </div>
     </div>
 
     <!-- TERMS AND CONDITIONS SECTION -->
     <div class="info-card-block">
       <div class="info-card-title">
-        <i data-lucide="file-text" size="20" color="#111"></i> Terms & Conditions
+        <i data-lucide="file-text" size="20"></i> Terms & Conditions
       </div>
       <ul class="terms-list">
         <li>
@@ -1329,7 +1469,7 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
     <!-- OPENING HOURS SECTION -->
     <div class="info-card-block">
       <div class="info-card-title">
-        <i data-lucide="clock" size="20" color="#111"></i> Opening Hours
+        <i data-lucide="clock" size="20"></i> Opening Hours
       </div>
       <div class="timing-row">
         <span>Monday - Saturday:</span>
@@ -1344,20 +1484,20 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
     <!-- CONTACTS & SOCIAL SECTION -->
     <div class="info-card-block">
       <div class="info-card-title">
-        <i data-lucide="share-2" size="20" color="#111"></i> Connect With Us
+        <i data-lucide="share-2" size="20"></i> Connect With Us
       </div>
       <div class="social-links-grid">
-        <a href="https://instagram.com" target="_blank" class="social-btn">
+        <a href="https://www.instagram.com/yaaden_studio?stkn=eXhoOW81dXJ1czNk" target="_blank" class="social-btn">
           <i data-lucide="instagram" size="16" color="#e1306c"></i> Instagram
         </a>
-        <a href="https://facebook.com" target="_blank" class="social-btn">
+        <a href="https://www.facebook.com/share/1K24h717bo/" target="_blank" class="social-btn">
           <i data-lucide="facebook" size="16" color="#1877f2"></i> Facebook
         </a>
         <a href="https://youtube.com" target="_blank" class="social-btn">
           <i data-lucide="youtube" size="16" color="#ff0000"></i> YouTube
         </a>
-        <a href="mailto:info@yaadenstudio.com" class="social-btn">
-          <i data-lucide="mail" size="16" color="#333"></i> Email Us
+        <a href="mailto:yaadencolourlab@gmail.com" class="social-btn">
+          <i data-lucide="mail" size="16"></i> Email Us
         </a>
       </div>
     </div>
@@ -1365,26 +1505,25 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
     <!-- GALLERY -->
     <div class="info-card-block">
       <div class="info-card-title">
-        <i data-lucide="grid" size="20" color="#111"></i> Our Work Gallery
+        <i data-lucide="grid" size="20"></i> Our Work Gallery
       </div>
-      <div class="gallery-grid">
-        <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=400&q=80');"></div>
-        <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=400&q=80');"></div>
-        <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=80');"></div>
-        <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=400&q=80');"></div>
-        <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=400&q=80');"></div>
-        <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=400&q=80');"></div>
-        <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=400&q=80');"></div>
-        <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=400&q=80');"></div>
-        <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1509924603848-aca5e5f276d7?auto=format&fit=crop&w=400&q=80');"></div>
-        <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80');"></div>
+      <div class="gallery-grid" id="galleryGrid">
+        <!-- Rendered dynamically -->
+      </div>
+      <div class="gallery-admin-actions" id="galleryAdminControls">
+        <button class="btn-news-action btn-news-add" onclick="openAddGalleryModal()">
+          <i data-lucide="plus-circle" size="16"></i> Add Photo
+        </button>
+        <button class="btn-news-action btn-news-remove" id="removeGalleryBtn" onclick="toggleRemoveGalleryMode()">
+          <i data-lucide="trash-2" size="16"></i> Remove Photo
+        </button>
       </div>
     </div>
 
     <!-- REVIEWS SECTION -->
     <div class="info-card-block">
       <div class="info-card-title">
-        <i data-lucide="star" size="20" color="#111"></i> Customer Reviews
+        <i data-lucide="star" size="20"></i> Customer Reviews
       </div>
 
       <div class="reviews-scroll-container" id="reviewsContainer">
@@ -1402,25 +1541,42 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
         <div style="font-size: 13px; font-weight: 700; margin-bottom: 8px;">Write a Review</div>
         <input type="text" id="revName" placeholder="Your Name">
         <textarea id="revComment" rows="2" placeholder="Write your experience..."></textarea>
-        <button class="btn-main" onclick="addNewReview()" style="padding: 8px; font-size: 12px;">Submit Review</button>
+        <button class="btn-main" onclick="addNewReview()" style="padding: 8px; font-size: 12px; background:var(--accent-color); color:var(--icon-color);">Submit Review</button>
       </div>
     </div>
 
     <!-- LOCATION -->
     <div class="info-card-block">
       <div class="info-card-title">
-        <i data-lucide="map-pin" size="20" color="#111"></i> Our Location
+        <i data-lucide="map-pin" size="20"></i> Our Location
       </div>
-      <div style="width: 100%; height: 180px; border-radius: 14px; overflow: hidden; border: 1px solid #ddd;">
+      <div style="width: 100%; height: 180px; border-radius: 14px; overflow: hidden; border: 1px solid var(--border-color);">
         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3501.980649725838!2d77.20902121508253!3d28.613939182424266!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce2db961be393%3A0xf6c7d70c79ab356!2sConnaught%20Place!5e0!3m2!1sen!2sin!4v1625000000000!5m2!1sen!2sin" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
       </div>
     </div>
 
-    <!-- ADMIN PANEL ADD SERVICES BUTTON (VISIBLE WHEN EDIT MODE IS ON) -->
+    <!-- ADMIN PANEL ADD SERVICES BUTTON -->
     <div class="admin-add-service-btn-wrapper" id="adminAddServiceBtnWrapper">
       <button class="btn-admin-add" onclick="openAdminAddServiceModal()">
         <i data-lucide="plus-circle" size="20"></i> ➕ ADD SERVICES (ADMIN)
       </button>
+    </div>
+
+    <!-- ADMIN PANEL THEME SELECTION BLOCK (SABSE NICHE) -->
+    <div class="theme-selection-block" id="adminThemeSelectionBlock">
+      <div class="theme-selection-title">
+        <i data-lucide="palette" size="20"></i> SELECT APP THEME (ADMIN)
+      </div>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
+        Niche se 5 me se koi bhi Color Combination choose karein. Ye theme User aur Admin dono par publicly dikhegi.
+      </p>
+      <select class="theme-select-dropdown" id="themeDropdownSelect" onchange="handleAdminThemeChange(this.value)">
+        <option value="theme-light">1. Classic Light (Default)</option>
+        <option value="theme-dark-slate">2. Dark Slate Gray</option>
+        <option value="theme-warm-coffee">3. Warm Beige & Coffee</option>
+        <option value="theme-neon-cyber">4. Neon Cyber</option>
+        <option value="theme-royal-gold">5. Royal Gold & Charcoal</option>
+      </select>
     </div>
 
     <div class="footer-branding">
@@ -1455,7 +1611,7 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
       <i data-lucide="x" class="close-modal-icon" size="20" onclick="closeModals()"></i>
 
       <div style="text-align: center; margin-bottom: 10px;">
-        <i data-lucide="shopping-cart" size="32" color="#111"></i>
+        <i data-lucide="shopping-cart" size="32"></i>
         <h3 style="font-size: 18px; font-weight: 800; margin-top: 4px;">Your Cart Orders</h3>
       </div>
 
@@ -1489,11 +1645,84 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
     <div class="modal-content" id="adminAddNewsModalContent"></div>
   </div>
 
+  <!-- ADMIN ADD GALLERY PHOTO MODAL -->
+  <div class="modal-overlay" id="adminAddGalleryModalOverlay">
+    <div class="modal-content" id="adminAddGalleryModalContent"></div>
+  </div>
+
   <!-- HIDDEN REAL FILE INPUT FOR USER UPLOAD -->
   <input type="file" id="globalImageFileInput" accept="image/*" style="display:none;" onchange="handleUserFileUploaded(event)">
 
   <script>
+    // Firebase Configuration Setup
+    const firebaseConfig = {
+      apiKey: "AIzaSyBj5Mj-6ruOZMNrd5J5LhKM_uYHxhJ3pgk",
+      authDomain: "yaden-colour-lab.firebaseapp.com",
+      databaseURL: "https://yaden-colour-lab-default-rtdb.firebaseio.com",
+      projectId: "yaden-colour-lab",
+      storageBucket: "yaden-colour-lab.firebasestorage.app",
+      messagingSenderId: "495201752582",
+      appId: "1:495201752582:web:0872441aed84e0adec9587",
+      measurementId: "G-79ZZ8969J2"
+    };
+
+    // Firebase Initialize
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
     lucide.createIcons();
+
+    function applyThemeToApp(themeClass) {
+      if (!themeClass) themeClass = 'theme-light';
+      document.body.className = themeClass;
+      const themeSelect = document.getElementById('themeDropdownSelect');
+      if (themeSelect) themeSelect.value = themeClass;
+    }
+
+    function handleAdminThemeChange(selectedTheme) {
+      applyThemeToApp(selectedTheme);
+      saveToFirebase('currentTheme', selectedTheme);
+    }
+
+    function syncFromFirebase() {
+      database.ref('studioData').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          if (data.currentTheme) {
+            applyThemeToApp(data.currentTheme);
+          }
+          if (data.news && typeof currentNewsData !== 'undefined') {
+            currentNewsData = data.news;
+            if (typeof renderNewsUI === 'function') renderNewsUI();
+          }
+          if (data.gallery && typeof galleryPhotos !== 'undefined') {
+            galleryPhotos = data.gallery;
+            if (typeof renderGalleryUI === 'function') renderGalleryUI();
+          }
+          if (data.services && typeof photoShotServiceData !== 'undefined') {
+            photoShotServiceData = data.services;
+          }
+          if (data.inkjetPrinting && typeof inkjetPrintingData !== 'undefined') {
+            inkjetPrintingData = data.inkjetPrinting;
+          }
+          if (data.photobookPrinting && typeof photobookPrintingData !== 'undefined') {
+            photobookPrintingData = data.photobookPrinting;
+          }
+          if (data.cupPrinting && typeof cupPrintingPrice !== 'undefined') {
+            cupPrintingPrice = data.cupPrinting;
+          }
+          if (data.genericServices && typeof genericServicesPriceData !== 'undefined') {
+            genericServicesPriceData = data.genericServices;
+          }
+        }
+      });
+    }
+
+    function saveToFirebase(key, data) {
+      database.ref('studioData/' + key).set(data);
+    }
+
+    syncFromFirebase();
 
     // ImgBB Details
     const imgbbApiKey = "7b777eaa7e91d65be4275d01537c3ada";
@@ -1506,6 +1735,8 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
           splash.style.display = 'none';
         }, 600);
       }, 2200);
+      renderGalleryUI();
+      renderNewsUI();
     });
 
     let cart = [];
@@ -1513,6 +1744,8 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
     let userSelectedPhotoUrl = '';
     let isUploading = false;
     let activePreviewImgId = 'allSizePreviewImg';
+    let currentSelectedPackageIndex = 0;
+    let activeServiceName = '';
 
     // YAADEN NEWS DATA STORE
     let currentNewsData = {
@@ -1522,6 +1755,21 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
       ],
       description: 'Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur grand shoots ki khabrein milengi. Slide karke sabhi photos dekhein.'
     };
+
+    // GALLERY DATA STORE
+    let galleryPhotos = [
+      'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=600&q=80',
+      'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80',
+      'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1509924603848-aca5e5f276d7?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80'
+    ];
+    let isGalleryRemoveMode = false;
 
     // EDIT MODE VARIABLES & DATA STORES
     let isEditModeActive = false;
@@ -1600,8 +1848,383 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
     ];
 
     let cupPrintingPrice = '₹250.00 (with Cup)';
-
     let genericServicesPriceData = {};
+
+    /* --- PHOTOSHOT MODALS & USER PANEL FUNCTIONS --- */
+    function openPhotoShotModal(serviceName) {
+      activeServiceName = serviceName;
+      currentSelectedPackageIndex = 0;
+      userSelectedPhotoUrl = '';
+
+      const pkgs = photoShotServiceData[serviceName] || [
+        { size: 'Standard', qty: '1 pcs', price: '₹200.00' }
+      ];
+
+      const modal = document.getElementById('customPrintModalOverlay');
+      const content = document.getElementById('customPrintModalContent');
+
+      content.innerHTML = `
+        <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeModals()"></i>
+        <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 4px;">${serviceName}</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Select package size and upload your photo to preview.</p>
+
+        <div class="upload-box" onclick="triggerPhotoUpload('psPreviewImg')">
+          <i data-lucide="upload-cloud" size="32"></i>
+          <div style="font-size: 13px; font-weight: 700; margin-top: 6px;">Click to Upload Photo</div>
+          <div style="font-size: 11px; color: var(--text-muted);">JPG or PNG supported</div>
+        </div>
+
+        <div class="preview-large-panel">
+          <img id="psPreviewImg" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80" alt="Preview" />
+        </div>
+
+        <div style="font-size: 13px; font-weight: 800; margin-bottom: 10px;">Select Package Size & Quantity:</div>
+        <div class="size-chips-grid">
+          ${pkgs.map((item, idx) => `
+            <div class="size-chip ${idx === 0 ? 'active' : ''}" id="ps_chip_${idx}" onclick="selectPsPackage(${idx})">
+              <div style="font-size:12px; font-weight:800;">${item.size}</div>
+              <div style="font-size:10px; opacity:0.8;">${item.qty}</div>
+              <span style="display:block; font-size:11px; margin-top:2px; font-weight:700; color:#2e7d32;">${item.price}</span>
+            </div>
+          `).join('')}
+        </div>
+
+        <button class="btn-main" onclick="confirmPhotoShotOrder()">
+          <i data-lucide="message-circle" size="18"></i> Send Enquiry to WhatsApp
+        </button>
+      `;
+
+      modal.style.display = 'flex';
+      lucide.createIcons();
+    }
+
+    function selectPsPackage(index) {
+      const pkgs = photoShotServiceData[activeServiceName] || [];
+      pkgs.forEach((_, idx) => {
+        const chip = document.getElementById(`ps_chip_${idx}`);
+        if(chip) chip.classList.remove('active');
+      });
+      const selectedChip = document.getElementById(`ps_chip_${index}`);
+      if(selectedChip) selectedChip.classList.add('active');
+      currentSelectedPackageIndex = index;
+    }
+
+    function confirmPhotoShotOrder() {
+      const pkgs = photoShotServiceData[activeServiceName] || [];
+      const pkg = pkgs[currentSelectedPackageIndex] || { size: 'Standard', qty: '1 pcs', price: '₹0' };
+      
+      let detailsText = `*Size:* ${pkg.size}%0A*Qty:* ${pkg.qty}%0A*Price:* ${pkg.price}`;
+      if (userSelectedPhotoUrl) {
+        detailsText += `%0A*Photo Link:* ${userSelectedPhotoUrl}`;
+      }
+
+      let message = `Hello Yaaden Studio,%0A%0AI want to enquire about the following service:%0A*Service:* ${activeServiceName}%0A${detailsText}%0A%0APlease process my enquiry. Thank you!`;
+      let url = `https://wa.me/91${targetWhatsAppNumber}?text=${message}`;
+
+      cart.push({
+        title: activeServiceName,
+        details: `Size: ${pkg.size} | Qty: ${pkg.qty} | Price: ${pkg.price}`,
+        photoUrl: userSelectedPhotoUrl
+      });
+      updateCartBadges();
+
+      window.open(url, '_blank');
+      closeModals();
+    }
+
+    function openAllSizePrintingModal(serviceTitle) {
+      activeServiceName = serviceTitle;
+      currentSelectedPackageIndex = 0;
+      userSelectedPhotoUrl = '';
+
+      const modal = document.getElementById('customPrintModalOverlay');
+      const content = document.getElementById('customPrintModalContent');
+
+      content.innerHTML = `
+        <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeModals()"></i>
+        <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 4px;">${serviceTitle}</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Select printing size and upload photo.</p>
+
+        <div class="upload-box" onclick="triggerPhotoUpload('allSizePreviewImg')">
+          <i data-lucide="upload-cloud" size="32"></i>
+          <div style="font-size: 13px; font-weight: 700; margin-top: 6px;">Click to Upload Photo</div>
+        </div>
+
+        <div class="preview-large-panel">
+          <img id="allSizePreviewImg" src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=600&q=80" alt="Preview" />
+        </div>
+
+        <div class="size-chips-grid">
+          ${allSizePrintingData.map((item, idx) => `
+            <div class="size-chip ${idx === 0 ? 'active' : ''}" id="as_chip_${idx}" onclick="selectAsPackage(${idx})">
+              <div style="font-size:12px; font-weight:800;">${item.size}</div>
+              <span style="display:block; font-size:11px; margin-top:2px; font-weight:700; color:#2e7d32;">${item.price}</span>
+            </div>
+          `).join('')}
+        </div>
+
+        <button class="btn-main" onclick="confirmAllSizeOrder()">
+          <i data-lucide="message-circle" size="18"></i> Send Enquiry to WhatsApp
+        </button>
+      `;
+
+      modal.style.display = 'flex';
+      lucide.createIcons();
+    }
+
+    function selectAsPackage(idx) {
+      allSizePrintingData.forEach((_, i) => {
+        const chip = document.getElementById(`as_chip_${i}`);
+        if(chip) chip.classList.remove('active');
+      });
+      const selected = document.getElementById(`as_chip_${idx}`);
+      if(selected) selected.classList.add('active');
+      currentSelectedPackageIndex = idx;
+    }
+
+    function confirmAllSizeOrder() {
+      const item = allSizePrintingData[currentSelectedPackageIndex] || { size: '4x6', price: '₹15.00' };
+      let photoMsg = userSelectedPhotoUrl ? `%0A*Photo Link:* ${userSelectedPhotoUrl}` : '';
+      let message = `Hello Yaaden Studio,%0A%0AI want to enquire about printing:%0A*Service:* ${activeServiceName}%0A*Size:* ${item.size}%0A*Price:* ${item.price}${photoMsg}`;
+      let url = `https://wa.me/91${targetWhatsAppNumber}?text=${message}`;
+
+      cart.push({
+        title: activeServiceName,
+        details: `Size: ${item.size} | Price: ${item.price}`,
+        photoUrl: userSelectedPhotoUrl
+      });
+      updateCartBadges();
+
+      window.open(url, '_blank');
+      closeModals();
+    }
+
+    function openInkjetPrintingModal() {
+      activeServiceName = 'Ink jet printing';
+      currentSelectedPackageIndex = 0;
+      userSelectedPhotoUrl = '';
+
+      const modal = document.getElementById('customPrintModalOverlay');
+      const content = document.getElementById('customPrintModalContent');
+
+      content.innerHTML = `
+        <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeModals()"></i>
+        <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 4px;">Ink jet printing</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Vibrant inkjet outputs. Select print size.</p>
+
+        <div class="upload-box" onclick="triggerPhotoUpload('ijPreviewImg')">
+          <i data-lucide="upload-cloud" size="32"></i>
+          <div style="font-size: 13px; font-weight: 700; margin-top: 6px;">Click to Upload Photo</div>
+        </div>
+
+        <div class="preview-large-panel">
+          <img id="ijPreviewImg" src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=80" alt="Preview" />
+        </div>
+
+        <div class="size-chips-grid">
+          ${inkjetPrintingData.map((item, idx) => `
+            <div class="size-chip ${idx === 0 ? 'active' : ''}" id="ij_chip_${idx}" onclick="selectIjPackage(${idx})">
+              <div style="font-size:12px; font-weight:800;">${item.size}</div>
+              <span style="display:block; font-size:11px; margin-top:2px; font-weight:700; color:#2e7d32;">₹${item.price}</span>
+            </div>
+          `).join('')}
+        </div>
+
+        <button class="btn-main" onclick="confirmInkjetOrder()">
+          <i data-lucide="message-circle" size="18"></i> Send Enquiry to WhatsApp
+        </button>
+      `;
+
+      modal.style.display = 'flex';
+      lucide.createIcons();
+    }
+
+    function selectIjPackage(idx) {
+      inkjetPrintingData.forEach((_, i) => {
+        const chip = document.getElementById(`ij_chip_${i}`);
+        if(chip) chip.classList.remove('active');
+      });
+      const selected = document.getElementById(`ij_chip_${idx}`);
+      if(selected) selected.classList.add('active');
+      currentSelectedPackageIndex = idx;
+    }
+
+    function confirmInkjetOrder() {
+      const item = inkjetPrintingData[currentSelectedPackageIndex] || { size: '12x18', price: '450' };
+      let photoMsg = userSelectedPhotoUrl ? `%0A*Photo Link:* ${userSelectedPhotoUrl}` : '';
+      let message = `Hello Yaaden Studio,%0A%0AI want to enquire about Inkjet printing:%0A*Size:* ${item.size}%0A*Price:* ₹${item.price}${photoMsg}`;
+      let url = `https://wa.me/91${targetWhatsAppNumber}?text=${message}`;
+
+      cart.push({
+        title: 'Ink jet printing',
+        details: `Size: ${item.size} | Price: ₹${item.price}`,
+        photoUrl: userSelectedPhotoUrl
+      });
+      updateCartBadges();
+
+      window.open(url, '_blank');
+      closeModals();
+    }
+
+    function openPhotobookModal() {
+      activeServiceName = 'Photobook printing';
+      const modal = document.getElementById('customPrintModalOverlay');
+      const content = document.getElementById('customPrintModalContent');
+
+      content.innerHTML = `
+        <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeModals()"></i>
+        <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 4px;">Photobook printing</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Rates per sq. ft. Select finish preference.</p>
+
+        <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+          ${photobookPrintingData.map(item => `
+            <div style="background:var(--bg-color); border:1px solid var(--border-color); padding:12px; border-radius:12px; display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:14px; font-weight:700; color:var(--text-main);">${item.finish} Finish</span>
+              <span style="font-size:13px; font-weight:800; color:#2e7d32;">${item.rate}</span>
+            </div>
+          `).join('')}
+        </div>
+
+        <button class="btn-main" onclick="sendWhatsAppOrder('Photobook printing', 'Photo printing Division')">
+          <i data-lucide="message-circle" size="18"></i> Send Enquiry to WhatsApp
+        </button>
+      `;
+
+      modal.style.display = 'flex';
+      lucide.createIcons();
+    }
+
+    function openCupPrintingModal() {
+      activeServiceName = 'Cup printing';
+      userSelectedPhotoUrl = '';
+
+      const modal = document.getElementById('customPrintModalOverlay');
+      const content = document.getElementById('customPrintModalContent');
+
+      content.innerHTML = `
+        <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeModals()"></i>
+        <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 4px;">Cup printing</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Personalized photo mug print.</p>
+
+        <div class="upload-box" onclick="triggerPhotoUpload('cupPreviewImg')">
+          <i data-lucide="upload-cloud" size="32"></i>
+          <div style="font-size: 13px; font-weight: 700; margin-top: 6px;">Upload Photo for Mug</div>
+        </div>
+
+        <div class="preview-large-panel">
+          <img id="cupPreviewImg" src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80" alt="Preview" />
+        </div>
+
+        <div style="font-size:14px; font-weight:800; margin-bottom:16px; text-align:center;">
+          Price: <span style="color:#2e7d32;">${cupPrintingPrice}</span>
+        </div>
+
+        <button class="btn-main" onclick="confirmCupOrder()">
+          <i data-lucide="message-circle" size="18"></i> Send Enquiry to WhatsApp
+        </button>
+      `;
+
+      modal.style.display = 'flex';
+      lucide.createIcons();
+    }
+
+    function confirmCupOrder() {
+      let photoMsg = userSelectedPhotoUrl ? `%0A*Photo Link:* ${userSelectedPhotoUrl}` : '';
+      let message = `Hello Yaaden Studio,%0A%0AI want to enquire about Cup Printing:%0A*Price:* ${cupPrintingPrice}${photoMsg}`;
+      let url = `https://wa.me/91${targetWhatsAppNumber}?text=${message}`;
+
+      cart.push({
+        title: 'Cup printing',
+        details: `Price: ${cupPrintingPrice}`,
+        photoUrl: userSelectedPhotoUrl
+      });
+      updateCartBadges();
+
+      window.open(url, '_blank');
+      closeModals();
+    }
+
+    function openOutdoorPhotographyModal() {
+      sendWhatsAppOrder('Outdoor Photography', 'Photoshot');
+    }
+
+    /* --- PHOTO UPLOAD HELPER --- */
+    function triggerPhotoUpload(previewImgId) {
+      activePreviewImgId = previewImgId;
+      document.getElementById('globalImageFileInput').click();
+    }
+
+    async function handleUserFileUploaded(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const imgEl = document.getElementById(activePreviewImgId);
+      if (imgEl) {
+        imgEl.style.opacity = '0.4';
+      }
+
+      const formData = new FormData();
+      formData.append("image", file);
+
+      try {
+        const res = await fetch(`https://api.imgbb.com/1/upload?key=${imgbbApiKey}`, {
+          method: "POST",
+          body: formData
+        });
+        const data = await res.json();
+        if (data.success) {
+          userSelectedPhotoUrl = data.data.url;
+          if (imgEl) {
+            imgEl.src = userSelectedPhotoUrl;
+            imgEl.style.opacity = '1';
+          }
+          alert("Photo successfully upload ho gayi hai!");
+        } else {
+          alert("Photo upload me dikat aayi, please dobara try karein.");
+        }
+      } catch (err) {
+        console.error("Upload Error:", err);
+        alert("Upload failed!");
+      }
+    }
+
+    function sendFullCartToWhatsApp() {
+      if (cart.length === 0) return;
+
+      let msg = `Hello Yaaden Studio,%0A%0AI want to confirm my complete order list:%0A`;
+      cart.forEach((item, index) => {
+        msg += `%0A*${index + 1}. ${item.title}*%0A- Details: ${item.details}`;
+        if (item.photoUrl) {
+          msg += `%0A- Photo URL: ${item.photoUrl}`;
+        }
+      });
+
+      msg += `%0A%0APlease process my order. Thank you!`;
+      window.open(`https://wa.me/91${targetWhatsAppNumber}?text=${msg}`, '_blank');
+    }
+
+    function addNewReview() {
+      const name = document.getElementById('revName').value.trim();
+      const comment = document.getElementById('revComment').value.trim();
+
+      if (!name || !comment) {
+        alert("Kripya Naam aur Review comment dono bharein!");
+        return;
+      }
+
+      const container = document.getElementById('reviewsContainer');
+      const div = document.createElement('div');
+      div.className = 'review-card';
+      div.innerHTML = `
+        <div class="review-header"><span class="reviewer-name">${name}</span><span class="stars">★★★★★</span></div>
+        <div class="review-comment">${comment}</div>
+      `;
+      container.prepend(div);
+
+      document.getElementById('revName').value = '';
+      document.getElementById('revComment').value = '';
+      alert("Aapka review submit ho gaya hai! Dhanyawad.");
+    }
 
     function toggleEditMode() {
       if (!isEditModeActive) {
@@ -1612,8 +2235,10 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
           document.getElementById('editToggleNavBtn').style.background = '#ff3b30';
           document.getElementById('editToggleNavBtn').style.color = '#fff';
           document.getElementById('adminAddServiceBtnWrapper').style.display = 'block';
+          document.getElementById('adminThemeSelectionBlock').style.display = 'block';
           document.getElementById('newsAdminControls').style.display = 'flex';
-          alert("Admin Edit Mode Active! Ab aap services edit kar sakte hain, naye service add kar sakte hain aur Yaaden News manage kar sakte hain.");
+          document.getElementById('galleryAdminControls').style.display = 'flex';
+          alert("Admin Edit Mode Active! Ab aap services edit kar sakte hain, naye service add kar sakte hain, Yaaden News aur Gallery photos manage kar sakte hain, aur niche se Theme badal sakte hain.");
         } else {
           alert("Incorrect Password!");
         }
@@ -1621,9 +2246,12 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
         isEditModeActive = false;
         document.getElementById('editNavText').innerText = 'Edit';
         document.getElementById('editToggleNavBtn').style.background = 'transparent';
-        document.getElementById('editToggleNavBtn').style.color = '#666';
+        document.getElementById('editToggleNavBtn').style.color = 'var(--text-muted)';
         document.getElementById('adminAddServiceBtnWrapper').style.display = 'none';
+        document.getElementById('adminThemeSelectionBlock').style.display = 'none';
         document.getElementById('newsAdminControls').style.display = 'none';
+        document.getElementById('galleryAdminControls').style.display = 'none';
+        if(isGalleryRemoveMode) toggleRemoveGalleryMode();
         alert("Edit Mode Off ho gaya hai.");
       }
     }
@@ -1636,8 +2264,128 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
       }
     }
 
-    /* --- YAADEN NEWS FUNCTIONS --- */
+    /* --- GALLERY FUNCTIONS --- */
+    function renderGalleryUI() {
+      const grid = document.getElementById('galleryGrid');
+      grid.innerHTML = galleryPhotos.map((url, idx) => `
+        <div class="gallery-item ${isGalleryRemoveMode ? 'selectable' : ''}" 
+             id="gallery-item-${idx}" 
+             style="background-image: url('${url}');" 
+             onclick="handleGalleryItemClick(${idx})"></div>
+      `).join('');
+    }
 
+    function toggleRemoveGalleryMode() {
+      isGalleryRemoveMode = !isGalleryRemoveMode;
+      const removeBtn = document.getElementById('removeGalleryBtn');
+      if (isGalleryRemoveMode) {
+        removeBtn.innerText = "Cancel Remove";
+        alert("Remove Photo Mode ON! Jis photo ko remove karna hai us par click karein.");
+      } else {
+        removeBtn.innerHTML = `<i data-lucide="trash-2" size="16"></i> Remove Photo`;
+        lucide.createIcons();
+      }
+      renderGalleryUI();
+    }
+
+    function handleGalleryItemClick(idx) {
+      if (!isGalleryRemoveMode) return;
+
+      const itemEl = document.getElementById(`gallery-item-${idx}`);
+      itemEl.classList.add('selected');
+
+      setTimeout(() => {
+        if (confirm("Kya aap sach me is photo ko gallery aur database se remove karna chahte hain?")) {
+          galleryPhotos.splice(idx, 1);
+          renderGalleryUI();
+          saveToFirebase('gallery', galleryPhotos);
+          alert("Photo successfully remove ho gayi hai!");
+          toggleRemoveGalleryMode();
+        } else {
+          itemEl.classList.remove('selected');
+        }
+      }, 100);
+    }
+
+    let tempGalleryUploadedPhoto = '';
+
+    function openAddGalleryModal() {
+      tempGalleryUploadedPhoto = '';
+      const modal = document.getElementById('adminAddGalleryModalOverlay');
+      const content = document.getElementById('adminAddGalleryModalContent');
+
+      content.innerHTML = `
+        <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeAddGalleryModal()"></i>
+        <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 6px;">Add Photo to Gallery</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Select image to upload into Gallery.</p>
+
+        <div class="edit-field-group">
+          <label>Select Photo</label>
+          <input type="file" id="galleryPhotoFileInput" accept="image/*" onchange="handleGalleryPhotoSelected(event)">
+          <div id="galleryUploadedStatus" style="font-size:12px; font-weight:700; color:#2e7d32; margin-top:6px;"></div>
+        </div>
+
+        <button class="btn-main" id="uploadGallerySubmitBtn" onclick="submitNewGalleryPhoto()" style="background:#2e7d32; color:#fff;">
+          <i data-lucide="upload" size="18"></i> Add to Gallery
+        </button>
+      `;
+
+      modal.style.display = 'flex';
+      lucide.createIcons();
+    }
+
+    function closeAddGalleryModal() {
+      document.getElementById('adminAddGalleryModalOverlay').style.display = 'none';
+    }
+
+    async function handleGalleryPhotoSelected(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const statusEl = document.getElementById('galleryUploadedStatus');
+      const btn = document.getElementById('uploadGallerySubmitBtn');
+
+      btn.style.opacity = '0.5';
+      btn.style.pointerEvents = 'none';
+      statusEl.innerText = "Photo upload ho rahi hai...";
+
+      const formData = new FormData();
+      formData.append("image", file);
+
+      try {
+        const res = await fetch(`https://api.imgbb.com/1/upload?key=${imgbbApiKey}`, {
+          method: "POST",
+          body: formData
+        });
+        const data = await res.json();
+        if (data.success) {
+          tempGalleryUploadedPhoto = data.data.url;
+          statusEl.innerText = "Photo upload ke liye ready hai!";
+        }
+      } catch (err) {
+        console.error("Gallery Photo Upload Error:", err);
+        statusEl.innerText = "Upload fail hua. Dobara try karein.";
+      }
+
+      btn.style.opacity = '1';
+      btn.style.pointerEvents = 'auto';
+    }
+
+    function submitNewGalleryPhoto() {
+      if (!tempGalleryUploadedPhoto) {
+        alert("Kripya pehle ek photo select karein!");
+        return;
+      }
+
+      galleryPhotos.push(tempGalleryUploadedPhoto);
+      renderGalleryUI();
+      saveToFirebase('gallery', galleryPhotos);
+
+      alert("Photo Gallery aur Database me successfully add ho gayi hai!");
+      closeAddGalleryModal();
+    }
+
+    /* --- YAADEN NEWS FUNCTIONS --- */
     function renderNewsUI() {
       const track = document.getElementById('newsSliderTrack');
       const desc = document.getElementById('newsDescDisplay');
@@ -1655,6 +2403,7 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
       if (confirm("Kya aap sach me iss News ko remove karna chahte hain?")) {
         currentNewsData = { photos: [], description: 'Filhal koi news available nahi hai.' };
         renderNewsUI();
+        saveToFirebase('news', currentNewsData);
         alert("News successfully remove kar di gayi hai!");
       }
     }
@@ -1669,7 +2418,7 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
       content.innerHTML = `
         <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeAddNewsModal()"></i>
         <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 6px;">Add New News</h3>
-        <p style="font-size: 12px; color: #666; margin-bottom: 16px;">Minimum 1 aur Maximum 3 photos upload karein, aur description dalein.</p>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Minimum 1 aur Maximum 3 photos upload karein, aur description dalein.</p>
 
         <div class="edit-field-group">
           <label>Upload Photos (Max 3)</label>
@@ -1678,11 +2427,11 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
         </div>
 
         <div class="edit-field-group">
-          <label>News Description (Up to 7000 Lines)</label>
-          <textarea id="newsDescriptionInput" rows="10" placeholder="Yaha par news ka poora detail description likhein..."></textarea>
+          <label>News Description</label>
+          <textarea id="newsDescriptionInput" rows="8" placeholder="Yaha par news ka detail description likhein..."></textarea>
         </div>
 
-        <button class="btn-main" id="uploadNewsSubmitBtn" onclick="submitNewNews()" style="background:#2e7d32;">
+        <button class="btn-main" id="uploadNewsSubmitBtn" onclick="submitNewNews()" style="background:#2e7d32; color:#fff;">
           <i data-lucide="upload" size="18"></i> Upload News
         </button>
       `;
@@ -1753,6 +2502,8 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
       currentNewsData.description = descText;
 
       renderNewsUI();
+      saveToFirebase('news', currentNewsData);
+
       alert("Nayi News successfully upload ho gayi hai!");
       closeAddNewsModal();
     }
@@ -1764,7 +2515,7 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
       let html = `
         <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeEditModal()"></i>
         <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 6px;">Edit: ${serviceName}</h3>
-        <p style="font-size: 12px; color: #666; margin-bottom: 16px;">Price, Size, Quantity / Pcs me badlav karein.</p>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Price, Size, Quantity / Pcs me badlav karein.</p>
       `;
 
       if (photoShotServiceData[serviceName]) {
@@ -1773,7 +2524,7 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
         items.forEach((item, idx) => {
           html += `
             <div class="edit-item-row">
-              <div style="font-size: 11px; font-weight: 800; color:#555; margin-bottom:6px;">Package #${idx + 1}</div>
+              <div style="font-size: 11px; font-weight: 800; color:var(--text-muted); margin-bottom:6px;">Package #${idx + 1}</div>
               <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px;">
                 <div class="edit-field-group" style="margin:0;">
                   <label>Size</label>
@@ -1792,7 +2543,7 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
           `;
         });
         html += `</div>`;
-        html += `<button class="btn-main" onclick="savePhotoShotEdit('${serviceName}')">Save Changes</button>`;
+        html += `<button class="btn-main" style="background:var(--accent-color); color:var(--icon-color);" onclick="savePhotoShotEdit('${serviceName}')">Save Changes</button>`;
       } 
       else if (serviceName === 'All size photo printing' || serviceName === 'Silver print') {
         html += `<div style="display:flex; flex-direction:column; gap:10px; max-height: 350px; overflow-y:auto; margin-bottom:15px;">`;
@@ -1813,7 +2564,7 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
           `;
         });
         html += `</div>`;
-        html += `<button class="btn-main" onclick="saveAllSizeEdit()">Save Changes</button>`;
+        html += `<button class="btn-main" style="background:var(--accent-color); color:var(--icon-color);" onclick="saveAllSizeEdit()">Save Changes</button>`;
       }
       else if (serviceName === 'Ink jet printing') {
         html += `<div style="display:flex; flex-direction:column; gap:10px; max-height: 350px; overflow-y:auto; margin-bottom:15px;">`;
@@ -1834,7 +2585,7 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
           `;
         });
         html += `</div>`;
-        html += `<button class="btn-main" onclick="saveInkjetEdit()">Save Changes</button>`;
+        html += `<button class="btn-main" style="background:var(--accent-color); color:var(--icon-color);" onclick="saveInkjetEdit()">Save Changes</button>`;
       }
       else if (serviceName === 'Photobook printing') {
         html += `<div style="display:flex; flex-direction:column; gap:10px; max-height: 350px; overflow-y:auto; margin-bottom:15px;">`;
@@ -1855,7 +2606,7 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
           `;
         });
         html += `</div>`;
-        html += `<button class="btn-main" onclick="savePhotobookEdit()">Save Changes</button>`;
+        html += `<button class="btn-main" style="background:var(--accent-color); color:var(--icon-color);" onclick="savePhotobookEdit()">Save Changes</button>`;
       }
       else if (serviceName === 'Cup printing') {
         html += `
@@ -1863,7 +2614,7 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
             <label>Price & Description</label>
             <input type="text" id="edit_cup_price" value="${cupPrintingPrice}">
           </div>
-          <button class="btn-main" onclick="saveCupEdit()">Save Changes</button>
+          <button class="btn-main" style="background:var(--accent-color); color:var(--icon-color);" onclick="saveCupEdit()">Save Changes</button>
         `;
       }
       else {
@@ -1873,7 +2624,7 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
             <label>Service Price / Package</label>
             <input type="text" id="edit_generic_price" value="${currentPrice}">
           </div>
-          <button class="btn-main" onclick="saveGenericEdit('${serviceName}')">Save Changes</button>
+          <button class="btn-main" style="background:var(--accent-color); color:var(--icon-color);" onclick="saveGenericEdit('${serviceName}')">Save Changes</button>
         `;
       }
 
@@ -1893,6 +2644,7 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
         item.qty = document.getElementById(`edit_ps_qty_${idx}`).value;
         item.price = document.getElementById(`edit_ps_price_${idx}`).value;
       });
+      saveToFirebase('services', photoShotServiceData);
       alert("Changes Saved Successfully!");
       closeEditModal();
     }
@@ -1902,6 +2654,7 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
         item.size = document.getElementById(`edit_as_size_${idx}`).value;
         item.price = document.getElementById(`edit_as_price_${idx}`).value;
       });
+      saveToFirebase('allSizePrinting', allSizePrintingData);
       alert("Changes Saved Successfully!");
       closeEditModal();
     }
@@ -1911,6 +2664,7 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
         item.size = document.getElementById(`edit_ij_size_${idx}`).value;
         item.price = document.getElementById(`edit_ij_price_${idx}`).value;
       });
+      saveToFirebase('inkjetPrinting', inkjetPrintingData);
       alert("Changes Saved Successfully!");
       closeEditModal();
     }
@@ -1920,12 +2674,14 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
         item.finish = document.getElementById(`edit_pb_finish_${idx}`).value;
         item.rate = document.getElementById(`edit_pb_rate_${idx}`).value;
       });
+      saveToFirebase('photobookPrinting', photobookPrintingData);
       alert("Changes Saved Successfully!");
       closeEditModal();
     }
 
     function saveCupEdit() {
       cupPrintingPrice = document.getElementById('edit_cup_price').value;
+      saveToFirebase('cupPrinting', cupPrintingPrice);
       alert("Changes Saved Successfully!");
       closeEditModal();
     }
@@ -1933,12 +2689,12 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
     function saveGenericEdit(serviceName) {
       let val = document.getElementById('edit_generic_price').value;
       genericServicesPriceData[serviceName] = val;
+      saveToFirebase('genericServices', genericServicesPriceData);
       alert("Changes Saved Successfully!");
       closeEditModal();
     }
 
     /* --- ADMIN ADD SERVICE FUNCTIONALITY --- */
-
     function openAdminAddServiceModal() {
       const modal = document.getElementById('adminAddServiceModalOverlay');
       const content = document.getElementById('adminAddServiceModalContent');
@@ -1946,7 +2702,7 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
       content.innerHTML = `
         <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeAdminAddServiceModal()"></i>
         <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 6px;">Add New Service</h3>
-        <p style="font-size: 12px; color: #666; margin-bottom: 16px;">Division, Service Name aur Packages define karein.</p>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Division, Service Name aur Packages define karein.</p>
 
         <div class="edit-field-group">
           <label>Select Division</label>
@@ -1969,11 +2725,11 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
           <input type="number" id="admin_package_count" min="1" max="20" placeholder="e.g. 10">
         </div>
 
-        <button class="btn-main" onclick="generatePackageInputFields()" style="margin-bottom:15px; background:#333;">Generate Package Fields</button>
+        <button class="btn-main" onclick="generatePackageInputFields()" style="margin-bottom:15px; background:var(--accent-color); color:var(--icon-color);">Generate Package Fields</button>
 
         <div id="admin_packages_container"></div>
 
-        <button class="btn-main" id="saveNewServiceBtn" onclick="saveNewAdminService()" style="display:none; background:#2e7d32;">Save Service</button>
+        <button class="btn-main" id="saveNewServiceBtn" onclick="saveNewAdminService()" style="display:none; background:#2e7d32; color:#fff;">Save Service</button>
       `;
 
       modal.style.display = 'flex';
@@ -1999,7 +2755,7 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
       for (let i = 0; i < count; i++) {
         html += `
           <div class="edit-item-row">
-            <div style="font-size: 12px; font-weight: 800; color:#111; margin-bottom:6px;">Package #${i + 1}</div>
+            <div style="font-size: 12px; font-weight: 800; color:var(--text-main); margin-bottom:6px;">Package #${i + 1}</div>
             <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px;">
               <div class="edit-field-group" style="margin:0;">
                 <label>Sizes</label>
@@ -2041,16 +2797,15 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
         packagesList.push({ size: s, qty: q, price: p });
       }
 
-      // Store in memory
       photoShotServiceData[serviceName] = packagesList;
+      saveToFirebase('services', photoShotServiceData);
 
-      // Dynamically add card to targeted division grid
       const grid = document.getElementById(`grid-${division}`);
       if (grid) {
         const card = document.createElement('div');
         card.className = 'service-card';
         card.onclick = function() {
-          handleServiceClick(serviceName, () => generatePhotoShotModal(serviceName, photoShotServiceData[serviceName], 0));
+          handleServiceClick(serviceName, () => openPhotoShotModal(serviceName));
         };
 
         card.innerHTML = `
@@ -2097,6 +2852,10 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
     function closeModals() {
       document.getElementById('cartModalOverlay').style.display = 'none';
       document.getElementById('customPrintModalOverlay').style.display = 'none';
+      document.getElementById('editServiceModalOverlay').style.display = 'none';
+      document.getElementById('adminAddServiceModalOverlay').style.display = 'none';
+      document.getElementById('adminAddNewsModalOverlay').style.display = 'none';
+      document.getElementById('adminAddGalleryModalOverlay').style.display = 'none';
     }
 
     function updateCartBadges() {
@@ -2119,7 +2878,7 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
       if (cart.length === 0) {
         container.innerHTML = `
           <div class="empty-cart-view">
-            <i data-lucide="shopping-bag" size="48" color="#ccc" style="margin-bottom: 8px;"></i>
+            <i data-lucide="shopping-bag" size="48" style="margin-bottom: 8px;"></i>
             <p style="font-weight: 600;">Your cart is empty!</p>
             <p style="font-size: 12px; margin-top: 4px;">Tap on any service to order via WhatsApp.</p>
           </div>
@@ -2154,539 +2913,6 @@ Welcome to Yaaden News! Yaha par hamari sabhi nayi updates, special events, aur 
       updateCartBadges();
       renderCartUI();
     }
-
-    function sendFullCartToWhatsApp() {
-      if (cart.length === 0) return;
-
-      let text = `Hello Yaaden Studio!%0A%0A*Selected Services Inquiry:*%0A-------------------------------%0A`;
-      cart.forEach((item, idx) => {
-        text += `*${idx + 1}. ${item.title}* (${item.details})%0A`;
-      });
-      text += `-------------------------------%0APlease process these requests.`;
-
-      window.open(`https://wa.me/91${targetWhatsAppNumber}?text=${text}`, '_blank');
-    }
-
-    function addNewReview() {
-      let name = document.getElementById('revName').value;
-      let comment = document.getElementById('revComment').value;
-
-      if (!name || !comment) {
-        alert('Please enter both name and review comment!');
-        return;
-      }
-
-      let container = document.getElementById('reviewsContainer');
-      let div = document.createElement('div');
-      div.className = 'review-card';
-      div.innerHTML = `
-        <div class="review-header"><span class="reviewer-name">${name}</span><span class="stars">★★★★★</span></div>
-        <div class="review-comment">${comment}</div>
-      `;
-
-      container.prepend(div);
-      document.getElementById('revName').value = '';
-      document.getElementById('revComment').value = '';
-      alert('Thank you! Your review has been added.');
-    }
-
-    /* OUTDOOR PHOTOGRAPHY MODAL (WITHOUT EDIT OPTION & WITHOUT UPLOAD) */
-    function openOutdoorPhotographyModal() {
-      const modal = document.getElementById('customPrintModalOverlay');
-      const content = document.getElementById('customPrintModalContent');
-
-      content.innerHTML = `
-        <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeModals()"></i>
-        <h3 style="font-size: 22px; font-weight: 800; margin-bottom: 20px;">Outdoor Photography</h3>
-
-        <div class="print-panel-body">
-          <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 18px; padding: 20px; margin-bottom: 20px; text-align: center;">
-            <div style="width: 50px; height: 50px; border-radius: 50%; background: #111; color: #fff; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px auto;">
-              <i data-lucide="sun" size="24"></i>
-            </div>
-            <div style="font-size: 16px; font-weight: 800; color: #111;">Outdoor Session Details</div>
-            <div style="font-size: 13px; color: #666; margin-top: 4px;">Natural location portraitures & shoot</div>
-          </div>
-
-          <div style="background: #ffffff; border: 1px solid #eeeeee; padding: 16px; border-radius: 14px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-size: 13px; color: #777;">Shoot Duration:</span>
-              <strong style="font-size: 14px; color: #111;">12 Hours</strong>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-size: 13px; color: #777;">Total Cost:</span>
-              <strong style="font-size: 18px; font-weight: 800; color: #2e7d32;">₹3,500.00</strong>
-            </div>
-          </div>
-
-          <button class="btn-main" style="background: #25D366; padding: 16px; font-size: 16px;" onclick="submitOutdoorEnquiry()">
-            <i data-lucide="message-square" size="20"></i> Book via WhatsApp
-          </button>
-        </div>
-      `;
-      modal.style.display = 'flex';
-      lucide.createIcons();
-    }
-
-    function submitOutdoorEnquiry() {
-      let msg = `Hello Yaaden Studio,%0A%0A*Division:* Photo shot Division%0A*Service:* Outdoor Photography%0A*Duration:* 12 Hours%0A*Cost:* ₹3,500.00%0A%0AI want to book this session. Please let me know the available dates!`;
-      
-      cart.push({ title: 'Outdoor Photography (12 Hours)', details: '₹3,500.00' });
-      updateCartBadges();
-      window.open(`https://wa.me/91${targetWhatsAppNumber}?text=${msg}`, '_blank');
-    }
-
-    /* REAL USER PHOTO SELECTION & UPLOAD TO IMGBB API */
-    function triggerPhotoUpload(previewImgId) {
-      activePreviewImgId = previewImgId;
-      document.getElementById('globalImageFileInput').click();
-    }
-
-    async function handleUserFileUploaded(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const localUrl = URL.createObjectURL(file);
-      const previewEl = document.getElementById(activePreviewImgId);
-      if (previewEl) {
-        previewEl.src = localUrl;
-      }
-
-      isUploading = true;
-      toggleWhatsAppButtons(false, "Uploading photo link...");
-
-      const formData = new FormData();
-      formData.append("image", file);
-
-      try {
-        const response = await fetch(`https://api.imgbb.com/1/upload?key=${imgbbApiKey}`, {
-          method: "POST",
-          body: formData
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-          userSelectedPhotoUrl = data.data.url;
-          isUploading = false;
-          toggleWhatsAppButtons(true, "Send Order to WhatsApp");
-          alert("Photo link successfully ready ho gaya hai!");
-        } else {
-          throw new Error("Upload failed");
-        }
-      } catch (error) {
-        console.error("Upload error:", error);
-        isUploading = false;
-        toggleWhatsAppButtons(true, "Send Order to WhatsApp");
-        alert("Photo upload karne mein dikkat aayi. Kripya dobara try karein.");
-      }
-    }
-
-    function toggleWhatsAppButtons(enable, text) {
-      const btns = document.querySelectorAll('.btn-main');
-      btns.forEach(btn => {
-        if (!enable) {
-          btn.style.opacity = "0.6";
-          btn.style.pointerEvents = "none";
-          btn.innerHTML = `<i data-lucide="loader" class="spin" size="20"></i> ${text}`;
-        } else {
-          btn.style.opacity = "1";
-          btn.style.pointerEvents = "auto";
-          btn.innerHTML = `<i data-lucide="message-square" size="20"></i> ${text}`;
-        }
-      });
-      lucide.createIcons();
-    }
-
-    function buildWhatsAppPhotoMessage(serviceTitle, extraDetails, divisionName = "Photo shot Division") {
-      let msg = `Hello Yaaden Studio,%0A%0A*Division:* ${divisionName}%0A*Service:* ${serviceTitle}%0A${extraDetails}%0A%0A`;
-      
-      if (userSelectedPhotoUrl && userSelectedPhotoUrl.startsWith('http')) {
-        msg += `*Uploaded Photo Link:*%0A${encodeURIComponent(userSelectedPhotoUrl)}%0A`;
-      } else {
-        msg += `*[Photo Attached]:* Photo select kar li hai, ise chat me alag se bhej raha hu.%0A`;
-      }
-      
-      msg += `%0APlease process my order!`;
-      return msg;
-    }
-
-    /* DYNAMIC MODALS FOR PHOTO SHOT DIVISION */
-    
-    let activePSSize = '';
-    let activePSQty = '';
-    let activePSPrice = '';
-
-    function generatePhotoShotModal(title, options, defaultIndex = 0) {
-      const modal = document.getElementById('customPrintModalOverlay');
-      const content = document.getElementById('customPrintModalContent');
-      let currentPreview = userSelectedPhotoUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80';
-
-      activePSSize = options[defaultIndex].size;
-      activePSQty = options[defaultIndex].qty;
-      activePSPrice = options[defaultIndex].price;
-
-      let chipsHTML = options.map((opt, idx) => `
-        <div class="size-chip ${idx === defaultIndex ? 'active' : ''}" onclick="selectPSOption('${title}', '${opt.size}', '${opt.qty}', '${opt.price}', this)">
-          ${opt.size}<br><span style="font-size:11px; color:#555;">${opt.qty}</span><br><strong style="font-size:11px; color:#2e7d32;">${opt.price}</strong>
-        </div>
-      `).join('');
-
-      content.innerHTML = `
-        <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeModals()"></i>
-        <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 16px;">${title}</h3>
-
-        <div class="print-panel-body">
-          <div class="upload-box" onclick="triggerPhotoUpload('psPreviewImg')">
-            <i data-lucide="upload-cloud" size="32" color="#111" style="margin-bottom: 6px;"></i>
-            <div style="font-weight: 800; font-size: 14px;">Select / Upload Photo</div>
-            <div style="font-size: 12px; color: #666;">Tap to choose photo from device</div>
-          </div>
-
-          <div class="preview-large-panel">
-            <img id="psPreviewImg" src="${currentPreview}" alt="Photo Preview">
-          </div>
-
-          <div style="font-size: 14px; font-weight: 800; margin-bottom: 10px;">Select Package / Size:</div>
-          <div class="size-chips-grid" id="psChipsGrid">
-            ${chipsHTML}
-          </div>
-
-          <div style="background: #f8f9fa; padding: 14px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <div>
-              <div style="font-size: 12px; color: #777;">Selected: <strong id="lblPSSize" style="color:#111;">${activePSSize}</strong> (${activePSQty})</div>
-              <div style="font-size: 18px; font-weight: 800; color: #2e7d32;" id="lblPSPrice">${activePSPrice}</div>
-            </div>
-          </div>
-
-          <button class="btn-main" style="background: #25D366; padding: 16px; font-size: 16px;" onclick="submitPhotoShotEnquiry('${title}')">
-            <i data-lucide="message-square" size="20"></i> Send Order to WhatsApp
-          </button>
-        </div>
-      `;
-
-      modal.style.display = 'flex';
-      lucide.createIcons();
-    }
-
-    function selectPSOption(title, size, qty, price, el) {
-      activePSSize = size;
-      activePSQty = qty;
-      activePSPrice = price;
-
-      document.querySelectorAll('#psChipsGrid .size-chip').forEach(c => c.classList.remove('active'));
-      el.classList.add('active');
-
-      document.getElementById('lblPSSize').innerText = size;
-      document.getElementById('lblPSPrice').innerText = price;
-    }
-
-    function submitPhotoShotEnquiry(title) {
-      let details = `*Package Size:* ${activePSSize}%0A*Quantity:* ${activePSQty}%0A*Price:* ${activePSPrice}`;
-      let msg = buildWhatsAppPhotoMessage(title, details, "Photo shot Division");
-      
-      cart.push({ title: `${title} (${activePSSize})`, details: `${activePSQty} - ${activePSPrice}` });
-      updateCartBadges();
-
-      window.open(`https://wa.me/91${targetWhatsAppNumber}?text=${msg}`, '_blank');
-    }
-
-    function openPhotoShotModal(title) {
-      generatePhotoShotModal(title, photoShotServiceData['Photo shot'], 0);
-    }
-
-    function openPhotoSessionModal(title) {
-      generatePhotoShotModal(title, photoShotServiceData['Photo session'], 0);
-    }
-
-    function openKidsPhotoModal(title) {
-      generatePhotoShotModal(title, photoShotServiceData['Kids photography'], 0);
-    }
-
-    function openMarriagePhotoModal(title) {
-      generatePhotoShotModal(title, photoShotServiceData['Marriages purpose Photography'], 0);
-    }
-
-    function openStudentPassportModal(title) {
-      generatePhotoShotModal(title, photoShotServiceData['Student passbook photo'], 0);
-    }
-
-    /* PRINTING DIVISION MODALS */
-
-    function openAllSizePrintingModal(customTitle = "All size photo printing") {
-      const modal = document.getElementById('customPrintModalOverlay');
-      const content = document.getElementById('customPrintModalContent');
-      let currentPreview = userSelectedPhotoUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80';
-
-      let chipsHTML = allSizePrintingData.map((opt, idx) => `
-        <div class="size-chip ${idx === 2 ? 'active' : ''}" onclick="selectAllSize('${opt.size}', '${opt.price}', ${opt.scale || 1.0}, this)">
-          ${opt.size}<br><span style="font-size:11px; color:#555;">${opt.price}</span>
-        </div>
-      `).join('');
-
-      content.innerHTML = `
-        <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeModals()"></i>
-        <h3 style="font-size: 22px; font-weight: 800; margin-bottom: 20px;">${customTitle}</h3>
-        
-        <div class="print-panel-body">
-          <div class="upload-box" onclick="triggerPhotoUpload('allSizePreviewImg')">
-            <i data-lucide="upload-cloud" size="36" color="#111" style="margin-bottom: 8px;"></i>
-            <div style="font-weight: 800; font-size: 15px;">Select Your Photo</div>
-            <div style="font-size: 13px; color: #666;">Tap here to choose photo from device</div>
-          </div>
-
-          <div class="preview-large-panel" id="allSizeContainer">
-            <img id="allSizePreviewImg" src="${currentPreview}" style="transform: scale(1);" alt="Preview">
-          </div>
-
-          <div style="font-size: 15px; font-weight: 800; margin-bottom: 12px;">Select Size & Price:</div>
-          <div class="size-chips-grid" id="allSizeChips">
-            ${chipsHTML}
-          </div>
-
-          <div style="background: #f8f9fa; padding: 16px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <div>
-              <div style="font-size: 12px; color: #777;">Selected Size: <strong id="lblAllSize" style="color:#111; font-size:14px;">4×6</strong></div>
-              <div style="font-size: 18px; font-weight: 800; color: #2e7d32;" id="lblAllPrice">${allSizePrintingData[2].price}</div>
-            </div>
-          </div>
-
-          <button class="btn-main" style="background: #25D366; padding: 16px; font-size: 16px;" onclick="submitAllSizeEnquiry('${customTitle}')">
-            <i data-lucide="message-square" size="20"></i> Send Order to WhatsApp
-          </button>
-        </div>
-      `;
-      modal.style.display = 'flex';
-      lucide.createIcons();
-    }
-
-    let currentSelectedAllSize = '4×6';
-    let currentSelectedAllPrice = '₹15.00';
-
-    function selectAllSize(size, price, scaleFactor, el) {
-      currentSelectedAllSize = size;
-      currentSelectedAllPrice = price;
-      
-      document.querySelectorAll('#allSizeChips .size-chip').forEach(c => c.classList.remove('active'));
-      el.classList.add('active');
-
-      document.getElementById('lblAllSize').innerText = size;
-      document.getElementById('lblAllPrice').innerText = price;
-
-      const img = document.getElementById('allSizePreviewImg');
-      if(img) img.style.transform = `scale(${scaleFactor})`;
-    }
-
-    function submitAllSizeEnquiry(title = "All size photo printing") {
-      let details = `*Selected Size:* ${currentSelectedAllSize}%0A*Price:* ${currentSelectedAllPrice}`;
-      let msg = buildWhatsAppPhotoMessage(title, details, "Photo printing Division");
-      window.open(`https://wa.me/91${targetWhatsAppNumber}?text=${msg}`, '_blank');
-    }
-
-    function openInkjetPrintingModal() {
-      const modal = document.getElementById('customPrintModalOverlay');
-      const content = document.getElementById('customPrintModalContent');
-      let currentPreview = userSelectedPhotoUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80';
-
-      let chipsHTML = inkjetPrintingData.map((opt, idx) => `
-        <div class="size-chip ${idx === 1 ? 'active' : ''}" onclick="selectInkjetSize('${opt.size}', ${opt.price}, this)">
-          ${opt.size}<br><span style="font-size:11px; color:#555;">₹${opt.price}</span>
-        </div>
-      `).join('');
-
-      chipsHTML += `
-        <div class="size-chip" onclick="selectInkjetSize('Custom (>24x36)', 0, this)">
-          Custom Size<br><span style="font-size:11px; color:#555;">₹2.50/sq.ft</span>
-        </div>
-      `;
-
-      content.innerHTML = `
-        <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeModals()"></i>
-        <h3 style="font-size: 22px; font-weight: 800; margin-bottom: 20px;">Ink Jet Printing</h3>
-
-        <div class="print-panel-body">
-          <div class="upload-box" onclick="triggerPhotoUpload('inkjetPreviewImg')">
-            <i data-lucide="upload-cloud" size="36" color="#111" style="margin-bottom: 8px;"></i>
-            <div style="font-weight: 800; font-size: 15px;">Select Your Photo</div>
-            <div style="font-size: 13px; color: #666;">Tap here to choose photo from device</div>
-          </div>
-
-          <div class="preview-large-panel">
-            <img id="inkjetPreviewImg" src="${currentPreview}" alt="Preview">
-          </div>
-
-          <div style="font-size: 15px; font-weight: 800; margin-bottom: 12px;">Select Size & Prices:</div>
-          <div class="size-chips-grid" id="inkjetChips">
-            ${chipsHTML}
-          </div>
-
-          <div id="customSizeInputBox" style="display: none; margin-bottom: 20px;">
-            <div style="font-size: 13px; font-weight: 700; margin-bottom: 6px;">Enter Custom Dimensions (in inches):</div>
-            <div style="display: flex; gap: 10px;">
-              <input type="number" id="customWidth" placeholder="Width (inches)" oninput="calculateCustomInkjet()" style="flex:1; padding: 12px; border:1px solid #ddd; border-radius:12px; font-size:14px;" />
-              <input type="number" id="customHeight" placeholder="Height (inches)" oninput="calculateCustomInkjet()" style="flex:1; padding: 12px; border:1px solid #ddd; border-radius:12px; font-size:14px;" />
-            </div>
-          </div>
-
-          <div style="background: #f8f9fa; padding: 16px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <div>
-              <div style="font-size: 12px; color: #777;">Selected Size: <strong id="lblInkjetSize" style="color:#111; font-size:14px;">12×18</strong></div>
-              <div style="font-size: 18px; font-weight: 800; color: #2e7d32;" id="lblInkjetPrice">₹450.00</div>
-            </div>
-          </div>
-
-          <button class="btn-main" style="background: #25D366; padding: 16px; font-size: 16px;" onclick="submitInkjetEnquiry()">
-            <i data-lucide="message-square" size="20"></i> Send Order to WhatsApp
-          </button>
-        </div>
-      `;
-      modal.style.display = 'flex';
-      lucide.createIcons();
-    }
-
-    let currentInkjetSize = '12×18';
-    let currentInkjetPrice = '₹450.00';
-
-    function selectInkjetSize(size, price, el) {
-      currentInkjetSize = size;
-      document.querySelectorAll('#inkjetChips .size-chip').forEach(c => c.classList.remove('active'));
-      el.classList.add('active');
-
-      const customBox = document.getElementById('customSizeInputBox');
-      if (size.includes('Custom')) {
-        customBox.style.display = 'block';
-        calculateCustomInkjet();
-      } else {
-        customBox.style.display = 'none';
-        currentInkjetPrice = `₹${price}.00`;
-        document.getElementById('lblInkjetSize').innerText = size;
-        document.getElementById('lblInkjetPrice').innerText = currentInkjetPrice;
-      }
-    }
-
-    function calculateCustomInkjet() {
-      let w = parseFloat(document.getElementById('customWidth').value) || 0;
-      let h = parseFloat(document.getElementById('customHeight').value) || 0;
-      let sqFt = (w * h) / 144;
-      let total = sqFt * 2.50;
-      currentInkjetSize = `Custom (${w}×${h} inches)`;
-      currentInkjetPrice = `₹${total.toFixed(2)}`;
-      document.getElementById('lblInkjetSize').innerText = currentInkjetSize;
-      document.getElementById('lblInkjetPrice').innerText = currentInkjetPrice;
-    }
-
-    function submitInkjetEnquiry() {
-      let details = `*Selected Size:* ${currentInkjetSize}%0A*Calculated Price:* ${currentInkjetPrice}`;
-      let msg = buildWhatsAppPhotoMessage("Ink jet printing", details, "Photo printing Division");
-      window.open(`https://wa.me/91${targetWhatsAppNumber}?text=${msg}`, '_blank');
-    }
-
-    function openCupPrintingModal() {
-      const modal = document.getElementById('customPrintModalOverlay');
-      const content = document.getElementById('customPrintModalContent');
-      let currentPreview = userSelectedPhotoUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80';
-
-      content.innerHTML = `
-        <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeModals()"></i>
-        <h3 style="font-size: 22px; font-weight: 800; margin-bottom: 20px;">Cup Printing</h3>
-
-        <div class="print-panel-body">
-          <div class="upload-box" onclick="triggerPhotoUpload('cupPreviewImg')">
-            <i data-lucide="upload-cloud" size="36" color="#111" style="margin-bottom: 8px;"></i>
-            <div style="font-weight: 800; font-size: 15px;">Select Your Photo</div>
-            <div style="font-size: 13px; color: #666;">Tap here to choose photo from device</div>
-          </div>
-
-          <div class="preview-large-panel">
-            <img id="cupPreviewImg" src="${currentPreview}" alt="Cup Print Photo Preview">
-          </div>
-
-          <div style="background: #f8f9fa; padding: 16px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <div>
-              <div style="font-size: 12px; color: #777;">Item: <strong style="color:#111;">Personalized Coffee Mug</strong></div>
-              <div style="font-size: 18px; font-weight: 800; color: #2e7d32;">${cupPrintingPrice}</div>
-            </div>
-          </div>
-
-          <button class="btn-main" style="background: #25D366; padding: 16px; font-size: 16px;" onclick="submitCupEnquiry()">
-            <i data-lucide="message-square" size="20"></i> Send Order to WhatsApp
-          </button>
-        </div>
-      `;
-      modal.style.display = 'flex';
-      lucide.createIcons();
-    }
-
-    function submitCupEnquiry() {
-      let details = `*Price:* ${cupPrintingPrice}`;
-      let msg = buildWhatsAppPhotoMessage("Cup printing", details, "Photo printing Division");
-      window.open(`https://wa.me/91${targetWhatsAppNumber}?text=${msg}`, '_blank');
-    }
-
-    function openPhotobookModal() {
-      const modal = document.getElementById('customPrintModalOverlay');
-      const content = document.getElementById('customPrintModalContent');
-      let currentPreview = userSelectedPhotoUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80';
-
-      let chipsHTML = photobookPrintingData.map((opt, idx) => `
-        <div class="size-chip ${idx === 0 ? 'active' : ''}" onclick="selectPhotobookFinish('${opt.finish}', '${opt.rate}', this)">
-          ${opt.finish}<br><span style="font-size:11px; color:#555;">${opt.rate}</span>
-        </div>
-      `).join('');
-
-      content.innerHTML = `
-        <i data-lucide="x" class="close-modal-icon" size="24" onclick="closeModals()"></i>
-        <h3 style="font-size: 22px; font-weight: 800; margin-bottom: 20px;">Photobook Printing</h3>
-
-        <div class="print-panel-body">
-          <div class="upload-box" onclick="triggerPhotoUpload('photobookPreviewImg')">
-            <i data-lucide="upload-cloud" size="36" color="#111" style="margin-bottom: 8px;"></i>
-            <div style="font-weight: 800; font-size: 15px;">Select Your Photo</div>
-            <div style="font-size: 13px; color: #666;">Tap here to choose photo from device</div>
-          </div>
-
-          <div class="preview-large-panel">
-            <img id="photobookPreviewImg" src="${currentPreview}" alt="Preview">
-          </div>
-
-          <div style="font-size: 15px; font-weight: 800; margin-bottom: 12px;">Select Finish Type & Rates:</div>
-          <div class="size-chips-grid" id="photobookChips">
-            ${chipsHTML}
-          </div>
-
-          <div style="background: #f8f9fa; padding: 16px; border-radius: 14px; margin-bottom: 20px; font-size: 13px; color: #555;">
-            <div>Maximum Size: <strong>12 × 18 inches</strong></div>
-            <div>Selected Finish Rate: <strong id="lblPhotobookRate" style="color:#2e7d32;">${photobookPrintingData[0].rate}</strong></div>
-          </div>
-
-          <button class="btn-main" style="background: #25D366; padding: 16px; font-size: 16px;" onclick="submitPhotobookEnquiry()">
-            <i data-lucide="message-square" size="20"></i> Send Order to WhatsApp
-          </button>
-        </div>
-      `;
-      modal.style.display = 'flex';
-      lucide.createIcons();
-    }
-
-    let currentPhotobookFinish = 'NTR';
-    let currentPhotobookRate = '₹130 per sq. ft';
-
-    function selectPhotobookFinish(finish, rate, el) {
-      currentPhotobookFinish = finish;
-      currentPhotobookRate = rate;
-      document.querySelectorAll('#photobookChips .size-chip').forEach(c => c.classList.remove('active'));
-      el.classList.add('active');
-      document.getElementById('lblPhotobookRate').innerText = rate;
-    }
-
-    function submitPhotobookEnquiry() {
-      let details = `*Finish Type:* ${currentPhotobookFinish}%0A*Rate:* ${currentPhotobookRate}`;
-      let msg = buildWhatsAppPhotoMessage("Photobook printing", details, "Photo printing Division");
-      window.open(`https://wa.me/91${targetWhatsAppNumber}?text=${msg}`, '_blank');
-    }
-
-    // Initialize News UI on page load
-    renderNewsUI();
   </script>
 </body>
 </html>
